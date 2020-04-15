@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Nefarius.ViGEm.Client;
+//using Nefarius.ViGEm.Client;
 
 namespace DS4Windows
 {
@@ -20,16 +20,32 @@ namespace DS4Windows
 
         public bool RunningQueue { get => runningQueue; }
 
-        public OutputDevice AllocateController(OutContType contType, ViGEmClient client)
+        //public OutputDevice AllocateController(OutContType contType, ViGEmClient client)
+        //{
+        //    OutputDevice outputDevice = null;
+        //    switch(contType)
+        //    {
+        //        case OutContType.X360:
+        //            outputDevice = new Xbox360OutDevice(client);
+        //            break;
+        //        case OutContType.DS4:
+        //            outputDevice = new DS4OutDevice(client);
+        //            break;
+        //        case OutContType.None:
+        //        default:
+        //            break;
+        //    }
+
+        //    return outputDevice;
+        //}
+
+        public OutputDevice AllocateController(OutContType contType, X360BusDevice client, int idx)
         {
             OutputDevice outputDevice = null;
-            switch(contType)
+            switch (contType)
             {
                 case OutContType.X360:
-                    outputDevice = new Xbox360OutDevice(client);
-                    break;
-                case OutContType.DS4:
-                    outputDevice = new DS4OutDevice(client);
+                    outputDevice = new Xbox360ScpOutDevice(client, idx);
                     break;
                 case OutContType.None:
                 default:

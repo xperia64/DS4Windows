@@ -106,12 +106,6 @@
       <HintPath>..\packages\TaskScheduler.2.8.17\lib\net452\Microsoft.Win32.TaskScheduler.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Nefarius.ViGEm.Client" Condition="'$(Platform)' == 'x64'&#xD;&#xA;">
-      <HintPath>.\libs\x64\Nefarius.ViGEm.Client\Nefarius.ViGEm.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Nefarius.ViGEm.Client" Condition="'$(Platform)' == 'x86'&#xD;&#xA;">
-      <HintPath>.\libs\x86\Nefarius.ViGEm.Client\Nefarius.ViGEm.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -172,7 +166,6 @@
     <Compile Include="DS4Control\ControllerSlotManager.cs" />
     <Compile Include="DS4Control\ControlService.cs" />
     <Compile Include="DS4Control\DS4LightBar.cs" />
-    <Compile Include="DS4Control\DS4OutDevice.cs" />
     <Compile Include="DS4Control\DS4StateFieldMapping.cs" />
     <Compile Include="DS4Control\InputMethods.cs" />
     <Compile Include="DS4Control\ITouchpadBehaviour.cs" />
@@ -185,10 +178,12 @@
     <Compile Include="DS4Control\OutputSlotManager.cs" />
     <Compile Include="DS4Control\ProfilePropGroups.cs" />
     <Compile Include="DS4Control\Program.cs" />
+    <Compile Include="DS4Control\ScpDevice.cs" />
     <Compile Include="DS4Control\ScpUtil.cs" />
     <Compile Include="DS4Control\UdpServer.cs" />
     <Compile Include="DS4Control\Util.cs" />
-    <Compile Include="DS4Control\Xbox360OutDevice.cs" />
+    <Compile Include="DS4Control\X360BusDevice.cs" />
+    <Compile Include="DS4Control\Xbox360ScpOutDevice.cs" />
     <Compile Include="DS4Forms\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
