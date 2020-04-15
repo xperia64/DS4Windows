@@ -262,9 +262,9 @@ namespace DS4Windows
         public static OutContType[] activeOutDevType = new OutContType[5] { DS4Windows.OutContType.None, DS4Windows.OutContType.None,
             DS4Windows.OutContType.None, DS4Windows.OutContType.None,
             DS4Windows.OutContType.None };
-        public static bool vigemInstalled = IsViGEmBusInstalled();
+        //public static bool vigemInstalled = IsViGEmBusInstalled();
         public static bool hidguardInstalled = IsHidGuardianInstalled();
-        public static string vigembusVersion = ViGEmBusVersion();
+        //public static string vigembusVersion = ViGEmBusVersion();
 
         public static X360Controls[] defaultButtonMapping = { X360Controls.None, X360Controls.LXNeg, X360Controls.LXPos,
             X360Controls.LYNeg, X360Controls.LYPos, X360Controls.RXNeg, X360Controls.RXPos, X360Controls.RYNeg, X360Controls.RYPos,
@@ -632,6 +632,11 @@ namespace DS4Windows
         public static bool IsViGEmBusInstalled()
         {
             return CheckForDevice(VIGEMBUS_GUID);
+        }
+
+        public static bool IsScpVBusInstalled()
+        {
+            return CheckForSysDevice(@"root\ScpVBus");
         }
 
         public static string ViGEmBusVersion()

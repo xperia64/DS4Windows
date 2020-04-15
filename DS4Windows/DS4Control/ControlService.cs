@@ -525,7 +525,8 @@ namespace DS4Windows
                 if (showlog)
                     LogDebug(DS4WinWPF.Properties.Resources.Starting);
 
-                LogDebug($"Connection to ViGEmBus {Global.vigembusVersion} established");
+                //LogDebug($"Connection to ViGEmBus {Global.vigembusVersion} established");
+                LogDebug($"Connection to ScpVBus established");
 
                 DS4Devices.isExclusiveMode = getUseExclusiveMode();
                 //uiContext = tempui as SynchronizationContext;
@@ -681,14 +682,15 @@ namespace DS4Windows
             else
             {
                 string logMessage = string.Empty;
-                if (!vigemInstalled)
+                /*if (!vigemInstalled)
                 {
                     logMessage = "ViGEmBus is not installed";
                 }
                 else
                 {
                     logMessage = "Could not connect to ViGEmBus. Please check the status of the System device in Device Manager and if Visual C++ 2017 Redistributable is installed.";
-                }
+                }*/
+                logMessage = "Could not connect to ScpVBus";
 
                 LogDebug(logMessage);
                 AppLogger.LogToTray(logMessage);

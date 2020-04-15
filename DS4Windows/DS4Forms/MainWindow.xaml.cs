@@ -126,7 +126,7 @@ namespace DS4WinWPF.DS4Forms
         {
             Task tempTask = Task.Run(() =>
             {
-                CheckDrivers();
+                //CheckDrivers();
                 if (!parser.Stop)
                 {
                     Dispatcher.BeginInvoke((Action)(() =>
@@ -1193,7 +1193,8 @@ Suspend support not enabled.", true);
 
         private void CheckDrivers()
         {
-            bool deriverinstalled = Global.IsViGEmBusInstalled();
+            //bool deriverinstalled = Global.IsViGEmBusInstalled();
+            bool deriverinstalled = Global.IsScpVBusInstalled();
             if (!deriverinstalled)
             {
                 Process p = new Process();
