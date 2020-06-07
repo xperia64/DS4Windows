@@ -83,7 +83,7 @@ namespace DS4Windows
             new VidPidInfo(RAZER_VID, 0x1000, "Razer Raiju PS4"),
             new VidPidInfo(NACON_VID, 0x0D01, "Nacon Revol Pro v.1", VidPidFeatureSet.NoGyroCalib), // Nacon Revolution Pro v1 and v2 doesn't support DS4 gyro calibration routines
             new VidPidInfo(NACON_VID, 0x0D02, "Nacon Revol Pro v.2", VidPidFeatureSet.NoGyroCalib),
-            new VidPidInfo(HORI_VID, 0x00EE, "Hori PS4 Mini"),  // Hori PS4 Mini Wired Gamepad
+            new VidPidInfo(HORI_VID, 0x00EE, "Hori PS4 Mini", VidPidFeatureSet.NoOutputData | VidPidFeatureSet.NoBatteryReading | VidPidFeatureSet.NoGyroCalib),  // Hori PS4 Mini Wired Gamepad
             new VidPidInfo(0x7545, 0x0104, "Armor 3 LU Cobra"), // Armor 3 Level Up Cobra
             new VidPidInfo(0x2E95, 0x7725, "Scuf Vantage"), // Scuf Vantage gamepad
             new VidPidInfo(0x11C0, 0x4001, "PS4 Fun"), // PS4 Fun Controller
@@ -121,16 +121,6 @@ namespace DS4Windows
             string temp = Global.GetDeviceProperty(deviceInstanceId,
                 NativeMethods.DEVPKEY_Device_UINumber);
             return string.IsNullOrEmpty(temp);
-        }
-
-        public static void FindControllersWrapper()
-        {
-            Thread tmpThread = new Thread(findControllers);
-            tmpThread.IsBackground = true;
-            tmpThread.Name = "Find Controllers";
-            tmpThread.Priority = ThreadPriority.AboveNormal;
-            tmpThread.Start();
-            tmpThread.Join();
         }
 
         // Enumerates ds4 controllers in the system
@@ -248,7 +238,7 @@ namespace DS4Windows
         {
             lock (Devices)
             {
-                IEnumerable<DS4Device> devices = getDS4Controllers();
+                IEnumerable<DS4Device> devices = Devices.Values.ToArray();
                 //foreach (DS4Device device in devices)
                 //for (int i = 0, devCount = devices.Count(); i < devCount; i++)
                 for (var devEnum = devices.GetEnumerator(); devEnum.MoveNext();)
