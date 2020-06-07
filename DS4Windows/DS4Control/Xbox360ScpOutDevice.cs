@@ -21,6 +21,7 @@ namespace DS4Windows
 
         public delegate void Xbox360FeedbackReceivedEventHandler(Xbox360ScpOutDevice sender, byte large, byte small, int idx);
         public event Xbox360FeedbackReceivedEventHandler FeedbackReceived;
+        public Xbox360FeedbackReceivedEventHandler forceFeedbackCall;
 
         public Xbox360ScpOutDevice(X360BusDevice client, int idx)
         {
