@@ -53,6 +53,7 @@
     value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
+
     mimetype: application/x-microsoft.net.object.bytearray.base64
     value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
@@ -117,210 +118,223 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Accel" xml:space="preserve">
-    <value>Achse</value>
+    <value>加速度</value>
   </data>
   <data name="Action" xml:space="preserve">
-    <value>Aktion</value>
+    <value>动作</value>
   </data>
   <data name="AddDirectory" xml:space="preserve">
-    <value>Add Directory</value>
+    <value>添加目录</value>
   </data>
   <data name="AddPrograms" xml:space="preserve">
-    <value>Programme hinzufügen</value>
+    <value>添加程序</value>
   </data>
   <data name="AddStartMenuPrograms" xml:space="preserve">
-    <value>Start Menu Programm hinzufügen</value>
+    <value>添加开始菜单程序</value>
   </data>
   <data name="AddSteamGames" xml:space="preserve">
-    <value>Steam Spiel hinzufügen</value>
+    <value>添加Steam游戏</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Alle</value>
+    <value>全部</value>
   </data>
   <data name="AutoProfiles" xml:space="preserve">
-    <value>Automatische Profile</value>
+    <value>自动配置</value>
   </data>
   <data name="Battery" xml:space="preserve">
-    <value>Batterie</value>
+    <value>电量</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Durchsuchen</value>
+    <value>浏览</value>
   </data>
   <data name="BrowseOtherPrograms" xml:space="preserve">
-    <value>Nach anderen Programmen suchen</value>
+    <value>浏览其他程序</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Abbrechen</value>
+    <value>取消</value>
   </data>
   <data name="CheckUpdateNow" xml:space="preserve">
-    <value>Jetzt nach Updates suchen</value>
+    <value>立即检查更新</value>
   </data>
   <data name="CheckUpdateStartup" xml:space="preserve">
-    <value>Nach Updates beim Starten von DS4Windows suchen</value>
+    <value>程序启动时检查更新</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Löschen</value>
+    <value>清除</value>
   </data>
   <data name="CloseMinimizes" xml:space="preserve">
-    <value>Schließen minimiert das Fenster</value>
+    <value>关闭时最小化</value>
   </data>
   <data name="Color" xml:space="preserve">
-    <value>Farbe</value>
+    <value>颜色</value>
   </data>
   <data name="Controller1Text" xml:space="preserve">
-    <value>Controller 1</value>
+    <value>手柄1</value>
   </data>
   <data name="Controller2Text" xml:space="preserve">
-    <value>Controller 2</value>
+    <value>手柄2</value>
   </data>
   <data name="Controller3Text" xml:space="preserve">
-    <value>Controller 3</value>
+    <value>手柄3</value>
   </data>
   <data name="Controller4Text" xml:space="preserve">
-    <value>Controller 4</value>
+    <value>手柄4</value>
   </data>
   <data name="Controllers" xml:space="preserve">
-    <value>Controller</value>
+    <value>手柄</value>
   </data>
   <data name="ControlPanel" xml:space="preserve">
-    <value>Einstellungs Panel</value>
+    <value>控制面板</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Löschen</value>
+    <value>删除</value>
   </data>
   <data name="DriverSetup" xml:space="preserve">
-    <value>Controller/Treiber Setup</value>
+    <value>驱动安装</value>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Kopieren</value>
+    <value>复制</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Bearbeiten</value>
+    <value>编辑</value>
   </data>
   <data name="EditAction" xml:space="preserve">
-    <value>Bearbeitungsaktionen</value>
+    <value>编辑动作</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Exportieren</value>
+    <value>导出</value>
   </data>
   <data name="Full" xml:space="preserve">
-    <value>Voll</value>
+    <value>全部</value>
   </data>
   <data name="Gyro" xml:space="preserve">
-    <value>Gyro</value>
+    <value>陀螺仪</value>
   </data>
   <data name="HideUnchecked" xml:space="preserve">
-    <value>Unmakierte ausblenden</value>
+    <value>隐藏未选中</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importieren</value>
+    <value>导入</value>
   </data>
   <data name="LeftStick" xml:space="preserve">
-    <value>Linker Stick</value>
+    <value>左摇杆</value>
   </data>
   <data name="Log" xml:space="preserve">
-    <value>Protokoll</value>
+    <value>日志</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>名称</value>
   </data>
   <data name="New" xml:space="preserve">
-    <value>Neu</value>
+    <value>新建</value>
   </data>
   <data name="NewAction" xml:space="preserve">
-    <value>Neue Aktion</value>
+    <value>新建动作</value>
   </data>
   <data name="NewProfile" xml:space="preserve">
-    <value>Neues Profil</value>
+    <value>新建配置</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>Keine</value>
+    <value>无</value>
   </data>
   <data name="Path" xml:space="preserve">
-    <value>Pfard</value>
+    <value>路径</value>
   </data>
   <data name="Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>配置文件</value>
   </data>
   <data name="ProfileFolder" xml:space="preserve">
-    <value>Profil Ordner</value>
+    <value>配置文件夹</value>
   </data>
   <data name="QuickCharge" xml:space="preserve">
-    <value>Schnelladen</value>
+    <value>快速充电</value>
   </data>
   <data name="RecordText" xml:space="preserve">
-    <value>Aufnehmen</value>
+    <value>录制</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Entfernen</value>
+    <value>移除</value>
   </data>
   <data name="RemoveAction" xml:space="preserve">
-    <value>AktionEntfernen</value>
+    <value>删除动作</value>
   </data>
   <data name="RightStick" xml:space="preserve">
-    <value>Rechter Stick</value>
+    <value>右摇杆</value>
   </data>
   <data name="Rumble" xml:space="preserve">
-    <value>Vibration</value>
+    <value>振动</value>
   </data>
   <data name="RunAtStartup" xml:space="preserve">
-    <value>Beim Hochfahren ausführen</value>
+    <value>开机自动启动</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="SaveProfile" xml:space="preserve">
-    <value>Sprichern</value>
+    <value>保存配置</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Einstellungen</value>
+    <value>设置</value>
   </data>
   <data name="ShowNotifications" xml:space="preserve">
-    <value>Benachrichtigungen anzeigen</value>
+    <value>显示通知</value>
   </data>
   <data name="StartMinimized" xml:space="preserve">
-    <value>Minimiert starten</value>
+    <value>启动时最小化</value>
   </data>
   <data name="StartText" xml:space="preserve">
-    <value>Start</value>
+    <value>开始</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>状态</value>
   </data>
   <data name="StopText" xml:space="preserve">
-    <value>Stop</value>
+    <value>停止</value>
   </data>
   <data name="TouchScroll" xml:space="preserve">
-    <value>Skrollen</value>
+    <value>滚动</value>
   </data>
   <data name="TouchSlide" xml:space="preserve">
-    <value>Wischen</value>
+    <value>滑动</value>
   </data>
   <data name="TouchTap" xml:space="preserve">
-    <value>Tippen</value>
+    <value>轻触</value>
   </data>
   <data name="Trigger" xml:space="preserve">
-    <value>Trigger</value>
+    <value>触发</value>
   </data>
   <data name="WarningsOnly" xml:space="preserve">
-    <value>Nur Warnungen</value>
+    <value>仅警告</value>
   </data>
   <data name="RumbleMaxSecs" xml:space="preserve">
-    <value>s</value>
+    <value>秒</value>
   </data>
   <data name="RumbleMaxSecsTip" xml:space="preserve">
-    <value>Automatisches stoppen der Vibration in Sekunden (0 = automatisches stoppen deaktiviert)</value>
+    <value>振动自动停止时间，单位为秒 (0则不自动停止)</value>
   </data>
   <data name="WindowTitle" xml:space="preserve">
-    <value>Fenster Titel</value>
+    <value>窗口标题</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Nach oben bewegen</value>
+    <value>上移</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Nach unten bewegen</value>
+    <value>下移</value>
+  </data>
+  <data name="AutoProfPathTip" xml:space="preserve">
+    <value>进程路径. ^ABC = 匹配字符串头 (^) | ABC$ = 匹配字符串尾 ($) | *ABC =包含字符串 (*)</value>
+  </data>
+  <data name="AutoProfTitleTip" xml:space="preserve">
+    <value>窗口标题. ^ABC = 匹配字符串头 (^) | ABC$ = 匹配字符串尾 ($) | *ABC =包含字符串 (*)</value>
   </data>
   <data name="GamepadTest" xml:space="preserve">
-    <value>Gamepad Test</value>
+    <value>手柄测试(GamepadTest)</value>
+  </data>
+  <data name="EnableOutputDataToDS4" xml:space="preserve">
+    <value>启用向DS4发送数据</value>
+  </data>
+  <data name="EnableOutputDataToDS4Tip" xml:space="preserve">
+    <value>定期向DS4发送灯条和振动数据。若手柄不支持接收该数据则取消选中。设定变更在手柄连接时生效</value>
+    <comment>To enter a line break into a string resource value in VisualStudio resource editor press Shift+Enter.</comment>
   </data>
 </root>

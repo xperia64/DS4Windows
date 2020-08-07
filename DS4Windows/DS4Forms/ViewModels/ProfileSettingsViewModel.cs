@@ -569,12 +569,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set => Global.DinputOnly[device] = value;
         }
 
-        public bool FlushHid
-        {
-            get => Global.FlushHIDQueue[device];
-            set => Global.FlushHIDQueue[device] = value;
-        }
-
         public bool IdleDisconnectExists
         {
             get => Global.IdleDisconnectTimeout[device] != 0;
@@ -704,7 +698,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public int SASteeringWheelEmulationAxisIndex
         {
             get => (int)Global.SASteeringWheelEmulationAxis[device];
-            set => Global.SASteeringWheelEmulationAxis[device] = (SASteeringWheelEmulationAxisType)value;
+            set
+            {
+                int temp = (int)Global.SASteeringWheelEmulationAxis[device];
+                if (temp == value) return;
+
+                Global.SASteeringWheelEmulationAxis[device] = (SASteeringWheelEmulationAxisType)value;
+                SASteeringWheelEmulationAxisIndexChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
         public event EventHandler SASteeringWheelEmulationAxisIndexChanged;
 
@@ -751,6 +752,31 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             get => Global.SASteeringWheelEmulationRange[device];
             set => Global.SASteeringWheelEmulationRange[device] = value;
+        }
+
+        public bool SASteeringWheelUseSmoothing
+        {
+            get => Global.WheelSmoothInfo[device].Enabled;
+            set
+            {
+                bool temp = Global.WheelSmoothInfo[device].Enabled;
+                if (temp == value) return;
+                Global.WheelSmoothInfo[device].Enabled = value;
+                SASteeringWheelUseSmoothingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler SASteeringWheelUseSmoothingChanged;
+
+        public double SASteeringWheelSmoothMinCutoff
+        {
+            get => Global.WheelSmoothInfo[device].MinCutoff;
+            set => Global.WheelSmoothInfo[device].MinCutoff = value;
+        }
+
+        public double SASteeringWheelSmoothBeta
+        {
+            get => Global.WheelSmoothInfo[device].Beta;
+            set => Global.WheelSmoothInfo[device].Beta = value;
         }
 
         public double LSDeadZone
@@ -1311,8 +1337,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public bool GyroMouseTurns
         {
-            get => Global.GyroMouseStickTriggerTurns[device];
-            set => Global.GyroMouseStickTriggerTurns[device] = value;
+            get => Global.GyroTriggerTurns[device];
+            set => Global.GyroTriggerTurns[device] = value;
         }
 
         public int GyroSensitivity
@@ -1434,20 +1460,39 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public double GyroMouseStickAntiDeadX
         {
-            get => Global.GyroMouseStickInf[device].antiDeadX;
-            set => Global.GyroMouseStickInf[device].antiDeadX = value;
+            get => Global.GyroMouseStickInf[device].antiDeadX * 100.0;
+            set => Global.GyroMouseStickInf[device].antiDeadX = value * 0.01;
         }
 
         public double GyroMouseStickAntiDeadY
         {
-            get => Global.GyroMouseStickInf[device].antiDeadY;
-            set => Global.GyroMouseStickInf[device].antiDeadY = value;
+            get => Global.GyroMouseStickInf[device].antiDeadY * 100.0;
+            set => Global.GyroMouseStickInf[device].antiDeadY = value * 0.01;
         }
 
         public int GyroMouseStickVertScale
         {
             get => Global.GyroMouseStickInf[device].vertScale;
             set => Global.GyroMouseStickInf[device].vertScale = value;
+        }
+
+        public bool GyroMouseStickMaxOutputEnabled
+        {
+            get => Global.GyroMouseStickInf[device].maxOutputEnabled;
+            set
+            {
+                bool temp = Global.GyroMouseStickInf[device].maxOutputEnabled;
+                if (temp == value) return;
+                Global.GyroMouseStickInf[device].maxOutputEnabled = value;
+                GyroMouseStickMaxOutputChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler GyroMouseStickMaxOutputChanged;
+
+        public double GyroMouseStickMaxOutput
+        {
+            get => Global.GyroMouseStickInf[device].maxOutput;
+            set => Global.GyroMouseStickInf[device].maxOutput = value;
         }
 
         public int GyroMouseStickEvalCondIndex
@@ -1464,6 +1509,23 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public bool GyroMouseStickInvertX
         {
+            get => (Global.GyroMouseStickInf[device].inverted & 1) == 1;
+            set
+            {
+                if (value)
+                {
+                    Global.GyroMouseStickInf[device].inverted |= 1;
+                }
+                else
+                {
+                    uint temp = Global.GyroMouseStickInf[device].inverted;
+                    Global.GyroMouseStickInf[device].inverted = (uint)(temp & ~1);
+                }
+            }
+        }
+
+        public bool GyroMouseStickInvertY
+        {
             get => (Global.GyroMouseStickInf[device].inverted & 2) == 2;
             set
             {
@@ -1473,23 +1535,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
                 else
                 {
-                    Global.GyroMouseStickInf[device].inverted &= 1;
-                }
-            }
-        }
-
-        public bool GyroMouseStickInvertY
-        {
-            get => (Global.GyroInvert[device] & 1) == 1;
-            set
-            {
-                if (value)
-                {
-                    Global.GyroInvert[device] |= 1;
-                }
-                else
-                {
-                    Global.GyroInvert[device] &= 2;
+                    uint temp = Global.GyroMouseStickInf[device].inverted;
+                    Global.GyroMouseStickInf[device].inverted = (uint)(temp & ~2);
                 }
             }
         }
@@ -1565,7 +1612,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
             ImageSourceConverter sourceConverter = new ImageSourceConverter();
             ImageSource temp = sourceConverter.
-                ConvertFromString("pack://application:,,,/DS4Windows;component/Resources/rainbowCCrop.png") as ImageSource;
+                ConvertFromString($"{Global.ASSEMBLY_RESOURCE_PREFIX}component/Resources/rainbowCCrop.png") as ImageSource;
             lightbarImgBrush.ImageSource = temp.Clone();
 
             presetMenuUtil = new PresetMenuHelper(device);
@@ -1575,7 +1622,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private void CalcProfileFlags(object sender, EventArgs e)
         {
-            Global.cacheProfileCustomsFlags(device);
+            Global.CacheProfileCustomsFlags(device);
         }
 
         private void SetupEvents()
@@ -2004,6 +2051,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             LeftStick,
             RightStick,
             DPad,
+            FaceButtons,
         }
 
         private Dictionary<ControlSelection, string> presetInputLabelDict =
@@ -2013,6 +2061,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 [ControlSelection.DPad] = "DPad",
                 [ControlSelection.LeftStick] = "Left Stick",
                 [ControlSelection.RightStick] = "Right Stick",
+                [ControlSelection.FaceButtons] = "Face Buttons",
             };
 
         public Dictionary<ControlSelection, string> PresetInputLabelDict
@@ -2062,6 +2111,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 case DS4Controls.RYPos:
                 case DS4Controls.R3:
                     controlInput = ControlSelection.RightStick;
+                    break;
+                case DS4Controls.Cross:
+                case DS4Controls.Circle:
+                case DS4Controls.Triangle:
+                case DS4Controls.Square:
+                    controlInput = ControlSelection.FaceButtons;
                     break;
                 default:
                     break;
@@ -2287,6 +2342,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     {
                         DS4Controls.RYNeg, DS4Controls.RYPos,
                         DS4Controls.RXNeg, DS4Controls.RXPos, DS4Controls.R3,
+                    });
+                    break;
+                case ControlSelection.FaceButtons:
+                    inputControls.AddRange(new DS4Controls[4]
+                    {
+                        DS4Controls.Triangle, DS4Controls.Cross,
+                        DS4Controls.Square, DS4Controls.Circle,
                     });
                     break;
                 case ControlSelection.None:
