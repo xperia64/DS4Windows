@@ -17,6 +17,7 @@ namespace DS4WinWPF
 
         public static bool HasStartProgEntry()
         {
+            // Exception handling should not be needed here. Method handles most cases
             bool exists = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\DS4Windows.lnk");
             return exists;
         }
@@ -26,11 +27,6 @@ namespace DS4WinWPF
             TaskService ts = new TaskService();
             Task tasker = ts.FindTask("RunDS4Windows");
             return tasker != null;
-        }
-
-        public static bool RunAtStartup()
-        {
-            return HasStartProgEntry() || HasTaskEntry();
         }
 
         public static void WriteStartProgEntry()
@@ -105,6 +101,11 @@ namespace DS4WinWPF
         public static void WriteTaskEntry()
         {
             DeleteTaskEntry();
+
+            // Create new version of task.bat file using current exe
+            // filename. Allow dynamic file
+            RefreshTaskBat();
+
             TaskService ts = new TaskService();
             TaskDefinition td = ts.NewTask();
             td.Triggers.Add(new LogonTrigger());
@@ -166,6 +167,22 @@ namespace DS4WinWPF
             }
 
             return result;
+        }
+
+        private static void RefreshTaskBat()
+        {
+            string dir = DS4Windows.Global.exedirpath;
+            string path = $@"{dir}\task.bat";
+            FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            using (StreamWriter w = new StreamWriter(fileStream))
+            {
+                string temp = string.Empty;
+                w.WriteLine("@echo off"); // Turn off echo
+                w.WriteLine("SET mypath=\"%~dp0\"");
+                temp = $"cmd.exe /c start \"RunDS4Windows\" %mypath%\\{DS4Windows.Global.exeFileName} -m";
+                w.WriteLine(temp);
+                w.WriteLine("exit");
+            }
         }
     }
 }

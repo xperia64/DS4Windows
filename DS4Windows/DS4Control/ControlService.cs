@@ -9,6 +9,7 @@ using static DS4Windows.Global;
 using System.Windows.Threading;
 using DS4WinWPF.DS4Control;
 using Microsoft.Win32;
+using Sensorit.Base;
 
 namespace DS4Windows
 {
@@ -36,14 +37,6 @@ namespace DS4Windows
         Thread tempBusThread;
         Thread eventDispatchThread;
         Dispatcher eventDispatcher;
-        public List<string> affectedDevs = new List<string>()
-        {
-            @"HID\VID_054C&PID_05C4",
-            @"HID\VID_054C&PID_09CC&MI_03",
-            @"HID\VID_054C&PID_0BA0&MI_03",
-            @"HID\{00001124-0000-1000-8000-00805f9b34fb}_VID&0002054c_PID&05c4",
-            @"HID\{00001124-0000-1000-8000-00805f9b34fb}_VID&0002054c_PID&09cc",
-        };
         public bool suspending;
         //SoundPlayer sp = new SoundPlayer();
         private UdpServer _udpServer;
@@ -615,12 +608,13 @@ namespace DS4Windows
                 //tempXbox.cont.FeedbackReceived -= tempXbox.forceFeedbackCall;
                 //tempXbox.forceFeedbackCall = null;
             }
-            //else if (contType == OutContType.DS4)
-            //{
-            //    DS4OutDevice tempDS4 = outDevice as DS4OutDevice;
-            //    tempDS4.cont.FeedbackReceived -= tempDS4.forceFeedbackCall;
-            //    tempDS4.forceFeedbackCall = null;
-            //}
+            /*else if (contType == OutContType.DS4)
+            {
+                DS4OutDevice tempDS4 = outDevice as DS4OutDevice;
+                //tempDS4.cont.FeedbackReceived -= tempDS4.forceFeedbackCall;
+                tempDS4.forceFeedbackCall = null;
+            }
+			*/
         }
 
         public void AttachNewUnboundOutDev(OutContType contType)
@@ -708,51 +702,53 @@ namespace DS4Windows
                     //tempXbox.Connect();
                     //LogDebug("X360 Controller #" + (index + 1) + " connected");
                 }
-                //else if (contType == OutContType.DS4)
-                //{
-                //    activeOutDevType[index] = OutContType.DS4;
-                //    if (slotDevice == null)
-                //    {
-                //        slotDevice = outputslotMan.FindOpenSlot();
-                //        if (slotDevice != null)
-                //        {
-                //            DS4OutDevice tempDS4 = EstablishOutDevice(index, OutContType.DS4)
-                //            as DS4OutDevice;
-                //            EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
-                //            outputslotMan.DeferredPlugin(tempDS4, index, outputDevices, contType);
-                //            slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
+                /*else if (contType == OutContType.DS4)
+                {
+                    activeOutDevType[index] = OutContType.DS4;
+                    if (slotDevice == null)
+                    {
+                        slotDevice = outputslotMan.FindOpenSlot();
+                        if (slotDevice != null)
+                        {
+                            DS4OutDevice tempDS4 = EstablishOutDevice(index, OutContType.DS4)
+                            as DS4OutDevice;
+                            //EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
+                            outputslotMan.DeferredPlugin(tempDS4, index, outputDevices, contType);
+                            //slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
 
-                //            LogDebug("Plugging in virtual DS4 Controller");
-                //            success = true;
-                //        }
-                //        else
-                //        {
-                //            LogDebug("Failed. No open output slot found");
-                //        }
-                //    }
-                //    else
-                //    {
-                //        slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
-                //        DS4OutDevice tempDS4 = slotDevice.OutputDevice as DS4OutDevice;
-                //        EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
-                //        outputDevices[index] = tempDS4;
-                //        outputslotMan.EventDispatcher.Invoke(() =>
-                //        {
-                //            slotDevice.CurrentType = contType;
-                //        });
-                //        success = true;
-                //    }
+                            LogDebug("Plugging in virtual DS4 Controller");
+                            success = true;
+                        }
+                        else
+                        {
+                            LogDebug("Failed. No open output slot found");
+                        }
+                    }
+                    else
+                    {
+                        slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
+                        DS4OutDevice tempDS4 = slotDevice.OutputDevice as DS4OutDevice;
+                        //EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
 
-                //    if (success) LogDebug("Associate DS4 Controller for input DS4 #" + (index + 1));
+                        outputslotMan.EventDispatcher.BeginInvoke((Action)(() =>
+                        {
+                            outputDevices[index] = tempDS4;
+                            slotDevice.CurrentType = contType;
+                        }));
+                        success = true;
+                    }
 
-                //    //DS4OutDevice tempDS4 = new DS4OutDevice(vigemTestClient);
-                //    //DS4OutDevice tempDS4 = outputslotMan.AllocateController(OutContType.DS4, vigemTestClient)
-                //    //    as DS4OutDevice;
-                //    //outputDevices[index] = tempDS4;
+                    if (success) LogDebug("Associate DS4 Controller for input DS4 #" + (index + 1));
 
-                //    //tempDS4.Connect();
-                //    //LogDebug("DS4 Controller #" + (index + 1) + " connected");
-                //}
+                    //DS4OutDevice tempDS4 = new DS4OutDevice(vigemTestClient);
+                    //DS4OutDevice tempDS4 = outputslotMan.AllocateController(OutContType.DS4, vigemTestClient)
+                    //    as DS4OutDevice;
+                    //outputDevices[index] = tempDS4;
+
+                    //tempDS4.Connect();
+                    //LogDebug("DS4 Controller #" + (index + 1) + " connected");
+                }
+				*/
 
                 if (success)
                 {
@@ -927,21 +923,6 @@ namespace DS4Windows
                         device.StartUpdate();
                         //string filename = ProfilePath[ind];
                         //ind++;
-                        if (showlog)
-                        {
-                            if (File.Exists(appdatapath + "\\Profiles\\" + ProfilePath[i] + ".xml"))
-                            {
-                                string prolog = DS4WinWPF.Properties.Resources.UsingProfile.Replace("*number*", (i + 1).ToString()).Replace("*Profile name*", ProfilePath[i]);
-                                LogDebug(prolog);
-                                AppLogger.LogToTray(prolog);
-                            }
-                            else
-                            {
-                                string prolog = DS4WinWPF.Properties.Resources.NotUsingProfile.Replace("*number*", (i + 1).ToString());
-                                LogDebug(prolog);
-                                AppLogger.LogToTray(prolog);
-                            }
-                        }
 
                         if (i >= 4) // out of Xinput devices!
                             break;
@@ -1232,20 +1213,6 @@ namespace DS4Windows
                             CheckProfileOptions(Index, device);
                             device.StartUpdate();
 
-                            //string filename = Path.GetFileName(ProfilePath[Index]);
-                            if (File.Exists(appdatapath + "\\Profiles\\" + ProfilePath[Index] + ".xml"))
-                            {
-                                string prolog = DS4WinWPF.Properties.Resources.UsingProfile.Replace("*number*", (Index + 1).ToString()).Replace("*Profile name*", ProfilePath[Index]);
-                                LogDebug(prolog);
-                                AppLogger.LogToTray(prolog);
-                            }
-                            else
-                            {
-                                string prolog = DS4WinWPF.Properties.Resources.NotUsingProfile.Replace("*number*", (Index + 1).ToString());
-                                LogDebug(prolog);
-                                AppLogger.LogToTray(prolog);
-                            }
-
                             HotplugController?.Invoke(this, device, Index);
 
                             break;
@@ -1273,17 +1240,15 @@ namespace DS4Windows
             }
 
             // Set up filter for new input device
-            OneEuroFilterPair tempFilterPair = new OneEuroFilterPair();
-            Mapping.wheelFilterPairs[ind] = tempFilterPair;
+            OneEuroFilter tempFilter = new OneEuroFilter(OneEuroFilterPair.DEFAULT_WHEEL_CUTOFF,
+                OneEuroFilterPair.DEFAULT_WHEEL_BETA);
+            Mapping.wheelFilters[ind] = tempFilter;
 
             // Carry over initial profile wheel smoothing values to filter instances.
             // Set up event hooks to keep values in sync
             SteeringWheelSmoothingInfo wheelSmoothInfo = WheelSmoothInfo[ind];
-            wheelSmoothInfo.SetFilterAttrs(tempFilterPair.axis1Filter);
-            wheelSmoothInfo.SetRefreshEvents(tempFilterPair.axis1Filter);
-
-            wheelSmoothInfo.SetFilterAttrs(tempFilterPair.axis2Filter);
-            wheelSmoothInfo.SetRefreshEvents(tempFilterPair.axis2Filter);
+            wheelSmoothInfo.SetFilterAttrs(tempFilter);
+            wheelSmoothInfo.SetRefreshEvents(tempFilter);
         }
 
         private void CheckLauchProfileOption(int ind, DS4Device device)
@@ -1498,6 +1463,11 @@ namespace DS4Windows
                 {
                     if (!getDInputOnly(ind))
                     {
+                        touchPad[ind].ReplaceOneEuroFilterPair();
+                        touchPad[ind].ReplaceOneEuroFilterPair();
+
+                        touchPad[ind].Cursor.ReplaceOneEuroFilterPair();
+                        touchPad[ind].Cursor.SetupLateOneEuroFilters();
                         PluginOutDev(ind, device);
                     }
                 }
@@ -1643,8 +1613,21 @@ namespace DS4Windows
                 //device.getPreviousState(PreviousState[ind]);
                 //DS4State pState = PreviousState[ind];
 
-                if (device.firstReport && device.IsAlive())
+                if (device.firstReport && device.isSynced())
                 {
+                    if (File.Exists(appdatapath + "\\Profiles\\" + ProfilePath[ind] + ".xml"))
+                    {
+                        string prolog = string.Format(DS4WinWPF.Properties.Resources.UsingProfile, (ind + 1).ToString(), ProfilePath[ind], $"{device.Battery}");
+                        LogDebug(prolog);
+                        AppLogger.LogToTray(prolog);
+                    }
+                    else
+                    {
+                        string prolog = string.Format(DS4WinWPF.Properties.Resources.NotUsingProfile, (ind + 1).ToString(), $"{device.Battery}");
+                        LogDebug(prolog);
+                        AppLogger.LogToTray(prolog);
+                    }
+
                     device.firstReport = false;
                     /*uiContext?.Post(new SendOrPostCallback(delegate (object state)
                     {

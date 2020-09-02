@@ -928,7 +928,7 @@ namespace DS4WinWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller *number* is not using a profile.
+        ///   Looks up a localized string similar to Controller {0} is not using a profile. Battery level is {1}%.
         /// </summary>
         public static string NotUsingProfile {
             get {
@@ -1045,7 +1045,7 @@ namespace DS4WinWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must quit other applications like UWP apps (Netflix), Steam, Uplay, NVIDIA IN-GAME before activating the &apos;Hide DS4 Controller&apos; option. For more info check https://github.com/Ryochan7/DS4Windows/wiki/Exclusive-Mode-(Hide-DS4-Controller-config-option)-tips-and-issues.
+        ///   Looks up a localized string similar to You must quit other applications like UWP apps (Netflix), Steam, Uplay, Edge, NVIDIA IN-GAME before activating the &apos;Hide DS4 Controller&apos; option. For more info check https://github.com/Ryochan7/DS4Windows/wiki/Exclusive-Mode-(Hide-DS4-Controller-config-option)-tips-and-issues.
         /// </summary>
         public static string QuitOtherPrograms {
             get {
@@ -1567,7 +1567,7 @@ namespace DS4WinWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller *number* is using Profile &quot;*Profile name*&quot;.
+        ///   Looks up a localized string similar to Controller {0} is using Profile &quot;{1}&quot;. Battery level is {2}%.
         /// </summary>
         public static string UsingProfile {
             get {
