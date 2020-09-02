@@ -56,5 +56,15 @@ namespace DS4Windows
         }
 
         public override string GetDeviceType() => devType;
+
+        private DS4State emptyState = new DS4State();
+        public override void ResetState(bool submit = true)
+        {
+            x360Bus.Parse(emptyState, report, slotIdx);
+            if (submit)
+            {
+                x360Bus.Report(report, rumble);
+            }
+        }
     }
 }
