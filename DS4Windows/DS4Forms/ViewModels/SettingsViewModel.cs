@@ -87,17 +87,19 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool MinimizeToTaskbar { get => DS4Windows.Global.MinToTaskbar; set => DS4Windows.Global.MinToTaskbar = value; }
         public bool CloseMinimizes { get => DS4Windows.Global.CloseMini; set => DS4Windows.Global.CloseMini = value; }
         public bool QuickCharge { get => DS4Windows.Global.QuickCharge; set => DS4Windows.Global.QuickCharge = value; }
-        public bool WhiteDS4Icon
+
+        public int IconChoiceIndex
         {
-            get => DS4Windows.Global.UseWhiteIcon;
+            get => (int)DS4Windows.Global.UseIconChoice;
             set
             {
-                if (DS4Windows.Global.UseWhiteIcon == value) return;
-                DS4Windows.Global.UseWhiteIcon = value;
-                WhiteDS4IconChanged?.Invoke(this, EventArgs.Empty);
+                int temp = (int)DS4Windows.Global.UseIconChoice;
+                if (temp == value) return;
+                DS4Windows.Global.UseIconChoice = (DS4Windows.TrayIconChoice)value;
+                IconChoiceIndexChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-        public event EventHandler WhiteDS4IconChanged;
+        public event EventHandler IconChoiceIndexChanged;
 
         public bool CheckForUpdates
         {
@@ -176,6 +178,52 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public string UdpIpAddress { get => DS4Windows.Global.getUDPServerListenAddress();
             set => DS4Windows.Global.setUDPServerListenAddress(value); }
         public int UdpPort { get => DS4Windows.Global.getUDPServerPortNum(); set => DS4Windows.Global.setUDPServerPort(value); }
+
+        public bool UseUdpSmoothing
+        {
+            get => DS4Windows.Global.UseUDPSeverSmoothing;
+            set
+            {
+                bool temp = DS4Windows.Global.UseUDPSeverSmoothing;
+                if (temp == value) return;
+                DS4Windows.Global.UseUDPSeverSmoothing = value;
+                UseUdpSmoothingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler UseUdpSmoothingChanged;
+
+        public Visibility UdpServerOneEuroPanelVisibility
+        {
+            get => DS4Windows.Global.isUsingUDPServer() && DS4Windows.Global.UseUDPSeverSmoothing ? Visibility.Visible : Visibility.Collapsed;
+        }
+        public event EventHandler UdpServerOneEuroPanelVisibilityChanged;
+
+        public double UdpSmoothMinCutoff
+        {
+            get => DS4Windows.Global.UDPServerSmoothingMincutoff;
+            set
+            {
+                double temp = DS4Windows.Global.UDPServerSmoothingMincutoff;
+                if (temp == value) return;
+                DS4Windows.Global.UDPServerSmoothingMincutoff = value;
+                UdpSmoothMinCutoffChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler UdpSmoothMinCutoffChanged;
+
+        public double UdpSmoothBeta
+        {
+            get => DS4Windows.Global.UDPServerSmoothingBeta;
+            set
+            {
+                double temp = DS4Windows.Global.UDPServerSmoothingBeta;
+                if (temp == value) return;
+                DS4Windows.Global.UDPServerSmoothingBeta = value;
+                UdpSmoothBetaChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler UdpSmoothBetaChanged;
+
         public bool UseCustomSteamFolder
         {
             get => DS4Windows.Global.UseCustomSteamFolder;
@@ -321,8 +369,20 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             RunStartTaskChanged += SettingsViewModel_RunStartTaskChanged;
             FakeExeNameChanged += SettingsViewModel_FakeExeNameChanged;
             FakeExeNameChangeCompare += SettingsViewModel_FakeExeNameChangeCompare;
+            UseUdpSmoothingChanged += SettingsViewModel_UseUdpSmoothingChanged;
+            UseUDPServerChanged += SettingsViewModel_UseUDPServerChanged;
 
             //CheckForUpdatesChanged += SettingsViewModel_CheckForUpdatesChanged;
+        }
+
+        private void SettingsViewModel_UseUDPServerChanged(object sender, EventArgs e)
+        {
+            UdpServerOneEuroPanelVisibilityChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SettingsViewModel_UseUdpSmoothingChanged(object sender, EventArgs e)
+        {
+            UdpServerOneEuroPanelVisibilityChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void SettingsViewModel_FakeExeNameChangeCompare(SettingsViewModel sender,
