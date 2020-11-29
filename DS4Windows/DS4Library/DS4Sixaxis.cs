@@ -18,9 +18,9 @@ namespace DS4Windows
     public class SixAxis
     {
         public const int ACC_RES_PER_G = 8192;
-        private const float F_ACC_RES_PER_G = ACC_RES_PER_G;
+        public const float F_ACC_RES_PER_G = ACC_RES_PER_G;
         public const int GYRO_RES_IN_DEG_SEC = 16;
-        private const float F_GYRO_RES_IN_DEG_SEC = GYRO_RES_IN_DEG_SEC;
+        public const float F_GYRO_RES_IN_DEG_SEC = GYRO_RES_IN_DEG_SEC;
 
         public int gyroYaw, gyroPitch, gyroRoll, accelX, accelY, accelZ;
         public int outputAccelX, outputAccelY, outputAccelZ;
@@ -127,7 +127,7 @@ namespace DS4Windows
         }
 
         int temInt = 0;
-        public void setCalibrationData(ref byte[] calibData, bool fromUSB)
+        public void setCalibrationData(ref byte[] calibData, bool useAltGyroCalib)
         {
             int pitchPlus, pitchMinus, yawPlus, yawMinus, rollPlus, rollMinus,
                 accelXPlus, accelXMinus, accelYPlus, accelYMinus, accelZPlus, accelZMinus,
@@ -137,7 +137,7 @@ namespace DS4Windows
             calibrationData[1].bias = (short)((ushort)(calibData[4] << 8) | calibData[3]);
             calibrationData[2].bias = (short)((ushort)(calibData[6] << 8) | calibData[5]);
 
-            if (!fromUSB)
+            if (!useAltGyroCalib)
             {
                 pitchPlus = temInt = (short)((ushort)(calibData[8] << 8) | calibData[7]);
                 yawPlus = temInt = (short)((ushort)(calibData[10] << 8) | calibData[9]);
@@ -237,6 +237,8 @@ namespace DS4Windows
             int AccelY = (short)((ushort)(accel[3] << 8) | accel[2]);
             int AccelZ = (short)((ushort)(accel[5] << 8) | accel[4]);
 
+            //Console.WriteLine("AccelZ: {0}", AccelZ);
+
             if (calibrationDone)
                 applyCalibs(ref currentYaw, ref currentPitch, ref currentRoll, ref AccelX, ref AccelY, ref AccelZ);
 
@@ -270,5 +272,9 @@ namespace DS4Windows
             return result;
         }
 
+        public void FireSixAxisEvent(SixAxisEventArgs args)
+        {
+            SixAccelMoved?.Invoke(this, args);
+        }
     }
 }

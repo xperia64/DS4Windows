@@ -566,74 +566,78 @@ namespace DS4Windows
                     SetDevRumble(device, large, small, devIndex);
                 };
 
-                tempXbox.forceFeedbackCall = p;
                 tempXbox.FeedbackReceived += p;
+                tempXbox.forceFeedbackCall = p;
             }
-            //else if (contType == OutContType.DS4)
-            //{
-            //    DS4OutDevice tempDS4 = outDevice as DS4OutDevice;
+            /*else if (contType == OutContType.DS4)
+            {
+                DS4OutDevice tempDS4 = outDevice as DS4OutDevice;
+                LightbarSettingInfo deviceLightbarSettingsInfo = Global.LightbarSettingsInfo[devIndex];
 
-            //    Nefarius.ViGEm.Client.Targets.DualShock4FeedbackReceivedEventHandler p = (sender, args) =>
-            //    {
-            //        //bool useRumble = false; bool useLight = false;
-            //        byte largeMotor = args.LargeMotor;
-            //        byte smallMotor = args.SmallMotor;
-            //        SetDevRumble(device, largeMotor, smallMotor, devIndex);
-            //        //DS4Color color = new DS4Color(args.LightbarColor.Red,
-            //        //        args.LightbarColor.Green,
-            //        //        args.LightbarColor.Blue);
-            //        ///*Console.WriteLine("IN EVENT");
-            //        //Console.WriteLine("Rumble ({0}, {1}) | Light ({2}, {3}, {4}) {5}",
-            //        //    largeMotor, smallMotor, color.red, color.green, color.blue, DateTime.Now.ToLongTimeString());
-            //        //    */
-            //        //if (largeMotor != 0 || smallMotor != 0)
-            //        //{
-            //        //    useRumble = true;
-            //        //}
+                Nefarius.ViGEm.Client.Targets.DualShock4FeedbackReceivedEventHandler p = (sender, args) =>
+                {
+                    bool useRumble = false; bool useLight = false;
+                    byte largeMotor = args.LargeMotor;
+                    byte smallMotor = args.SmallMotor;
+                    //SetDevRumble(device, largeMotor, smallMotor, devIndex);
+                    DS4Color color = new DS4Color(args.LightbarColor.Red,
+                            args.LightbarColor.Green,
+                            args.LightbarColor.Blue);
 
-            //        //if (color.red != 0 || color.green != 0 || color.blue != 0)
-            //        //{
-            //        //    useLight = true;
-            //        //}
+                    //Console.WriteLine("IN EVENT");
+                    //Console.WriteLine("Rumble ({0}, {1}) | Light ({2}, {3}, {4}) {5}",
+                    //    largeMotor, smallMotor, color.red, color.green, color.blue, DateTime.Now.ToLongTimeString());
 
-            //        //if (!useRumble && !useLight)
-            //        //{
-            //        //    //Console.WriteLine("Fallback");
-            //        //    if (device.LeftHeavySlowRumble != 0 || device.RightLightFastRumble != 0)
-            //        //    {
-            //        //        useRumble = true;
-            //        //    }
-            //        //    /*else if (device.LightBarColor.red != 0 ||
-            //        //        device.LightBarColor.green != 0 ||
-            //        //        device.LightBarColor.blue != 0)
-            //        //    {
-            //        //        useLight = true;
-            //        //    }
-            //        //    */
-            //        //}
+                    if (largeMotor != 0 || smallMotor != 0)
+                    {
+                        useRumble = true;
+                    }
 
-            //        //if (useRumble)
-            //        //{
-            //        //    //Console.WriteLine("Perform rumble");
-            //        //    SetDevRumble(device, largeMotor, smallMotor, devIndex);
-            //        //}
+                    // Let games to control lightbar only when the mode is Passthru (otherwise DS4Windows controls the light)
+                    if (deviceLightbarSettingsInfo.Mode == LightbarMode.Passthru && (color.red != 0 || color.green != 0 || color.blue != 0))
+                    {
+                        useLight = true;
+                    }
 
-            //        //if (useLight)
-            //        //{
-            //        //    //Console.WriteLine("Change lightbar color");
-            //        //    DS4HapticState haptics = new DS4HapticState
-            //        //    {
-            //        //        LightBarColor = color,
-            //        //    };
-            //        //    device.SetHapticState(ref haptics);
-            //        //}
+                    if (!useRumble && !useLight)
+                    {
+                        //Console.WriteLine("Fallback");
+                        if (device.LeftHeavySlowRumble != 0 || device.RightLightFastRumble != 0)
+                        {
+                            useRumble = true;
+                        }
+                        else if (deviceLightbarSettingsInfo.Mode == LightbarMode.Passthru && 
+                            (device.LightBarColor.red != 0 ||
+                            device.LightBarColor.green != 0 ||
+                            device.LightBarColor.blue != 0))
+                        {
+                            useLight = true;
+                        }
+                    }
 
-            //        //Console.WriteLine();
-            //    };
+                    if (useRumble)
+                    {
+                        //Console.WriteLine("Perform rumble");
+                        SetDevRumble(device, largeMotor, smallMotor, devIndex);
+                    }
 
-            //    tempDS4.cont.FeedbackReceived += p;
-            //    tempDS4.forceFeedbackCall = p;
-            //}
+                    if (useLight)
+                    {
+                        //Console.WriteLine("Change lightbar color");
+                        DS4HapticState haptics = new DS4HapticState
+                        {
+                            LightBarColor = color,
+                        };
+                        device.SetHapticState(ref haptics);
+                    }
+
+                    //Console.WriteLine();
+                };
+
+                tempDS4.cont.FeedbackReceived += p;
+                tempDS4.forceFeedbackCall = p;
+            }
+            //*/
         }
 
         public void RemoveOutFeedback(OutContType contType, OutputDevice outDevice)
@@ -649,7 +653,7 @@ namespace DS4Windows
             /*else if (contType == OutContType.DS4)
             {
                 DS4OutDevice tempDS4 = outDevice as DS4OutDevice;
-                //tempDS4.cont.FeedbackReceived -= tempDS4.forceFeedbackCall;
+                tempDS4.cont.FeedbackReceived -= tempDS4.forceFeedbackCall;
                 tempDS4.forceFeedbackCall = null;
             }
 			*/
@@ -709,7 +713,11 @@ namespace DS4Windows
                             Xbox360ScpOutDevice tempXbox = EstablishOutDevice(index, OutContType.X360)
                             as Xbox360ScpOutDevice;
                             //outputDevices[index] = tempXbox;
-                            EstablishOutFeedback(index, OutContType.X360, tempXbox, device);
+                            
+                            // Enable ViGem feedback callback handler only if lightbar/rumble data output is enabled (if those are disabled then no point enabling ViGem callback handler call)
+                            if (Global.EnableOutputDataToDS4[index])
+                                EstablishOutFeedback(index, OutContType.X360, tempXbox, device);
+                            
                             outputslotMan.DeferredPlugin(tempXbox, index, outputDevices, contType);
                             //slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
 
@@ -724,8 +732,12 @@ namespace DS4Windows
                     else
                     {
                         slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
+                        //Xbox360OutDevice tempXbox = slotDevice.OutputDevice as Xbox360OutDevice;
                         Xbox360ScpOutDevice tempXbox = slotDevice.OutputDevice as Xbox360ScpOutDevice;
-                        EstablishOutFeedback(index, OutContType.X360, tempXbox, device);
+
+                        // Enable ViGem feedback callback handler only if lightbar/rumble data output is enabled (if those are disabled then no point enabling ViGem callback handler call)
+                        if (Global.EnableOutputDataToDS4[index])
+                            EstablishOutFeedback(index, OutContType.X360, tempXbox, device);
 
                         outputslotMan.EventDispatcher.BeginInvoke((Action)(() =>
                         {
@@ -750,7 +762,11 @@ namespace DS4Windows
                         {
                             DS4OutDevice tempDS4 = EstablishOutDevice(index, OutContType.DS4)
                             as DS4OutDevice;
-                            //EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
+
+                            // Enable ViGem feedback callback handler only if DS4 lightbar/rumble data output is enabled (if those are disabled then no point enabling ViGem callback handler call)
+                            if (Global.EnableOutputDataToDS4[index])
+                                EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
+                                
                             outputslotMan.DeferredPlugin(tempDS4, index, outputDevices, contType);
                             //slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
 
@@ -766,7 +782,10 @@ namespace DS4Windows
                     {
                         slotDevice.CurrentInputBound = OutSlotDevice.InputBound.Bound;
                         DS4OutDevice tempDS4 = slotDevice.OutputDevice as DS4OutDevice;
-                        //EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
+
+                        // Enable ViGem feedback callback handler only if lightbar/rumble data output is enabled (if those are disabled then no point enabling ViGem callback handler call)
+                        if (Global.EnableOutputDataToDS4[index])
+                            EstablishOutFeedback(index, OutContType.DS4, tempDS4, device);
 
                         outputslotMan.EventDispatcher.BeginInvoke((Action)(() =>
                         {
@@ -843,7 +862,7 @@ namespace DS4Windows
                 //LogDebug($"Connection to ViGEmBus {Global.vigembusVersion} established");
                 LogDebug($"Connection to ScpVBus established");
 
-                DS4Devices.isExclusiveMode = getUseExclusiveMode();
+                DS4Devices.isExclusiveMode = getUseExclusiveMode(); //Re-enable Exclusive Mode
 
                 UpdateHidGuardAttributes();
 
@@ -955,6 +974,12 @@ namespace DS4Windows
                                 CurrentState[tempIdx].CopyTo(stateForUdp);
                                 if (Global.IsUsingUDPServerSmoothing())
                                 {
+                                    if (stateForUdp.elapsedTime == 0)
+                                    {
+                                        // No timestamp was found. Exit out of routine
+                                        return;
+                                    }
+
                                     double rate = 1.0 / stateForUdp.elapsedTime;
                                     OneEuroFilter3D accelFilter = udpEuroPairAccel[tempIdx];
                                     stateForUdp.Motion.accelXG = accelFilter.axis1Filter.Filter(stateForUdp.Motion.accelXG, rate);
@@ -1256,11 +1281,18 @@ namespace DS4Windows
 
                                     if (Global.IsUsingUDPServerSmoothing())
                                     {
+                                        if (stateForUdp.elapsedTime == 0)
+                                        {
+                                            // No timestamp was found. Exit out of routine
+                                            return;
+                                        }
+
                                         double rate = 1.0 / stateForUdp.elapsedTime;
                                         OneEuroFilter3D accelFilter = udpEuroPairAccel[tempIdx];
                                         stateForUdp.Motion.accelXG = accelFilter.axis1Filter.Filter(stateForUdp.Motion.accelXG, rate);
                                         stateForUdp.Motion.accelYG = accelFilter.axis2Filter.Filter(stateForUdp.Motion.accelYG, rate);
                                         stateForUdp.Motion.accelZG = accelFilter.axis3Filter.Filter(stateForUdp.Motion.accelZG, rate);
+
 
                                         OneEuroFilter3D gyroFilter = udpEuroPairGyro[tempIdx];
                                         stateForUdp.Motion.angVelYaw = gyroFilter.axis1Filter.Filter(stateForUdp.Motion.angVelYaw, rate);
@@ -1352,6 +1384,14 @@ namespace DS4Windows
             wheelSmoothInfo.SetRefreshEvents(tempFilter);
 
             ResetUdpSmoothingFilters(ind);
+            Mapping.flickMappingData[ind].Reset();
+            FlickStickSettings flickStickSettings = Global.LSOutputSettings[ind].outputSettings.flickSettings;
+            flickStickSettings.RemoveRefreshEvents();
+            flickStickSettings.SetRefreshEvents(Mapping.flickMappingData[ind].flickFilter);
+
+            flickStickSettings = Global.RSOutputSettings[ind].outputSettings.flickSettings;
+            flickStickSettings.RemoveRefreshEvents();
+            flickStickSettings.SetRefreshEvents(Mapping.flickMappingData[ind].flickFilter);
         }
 
         private void CheckLauchProfileOption(int ind, DS4Device device)
@@ -1919,7 +1959,7 @@ namespace DS4Windows
 
         protected virtual void CheckForTouchToggle(int deviceID, DS4State cState, DS4State pState)
         {
-            if (!getUseTPforControls(deviceID) && cState.Touch1 && pState.PS)
+            if (!IsUsingTouchpadForControls(deviceID) && cState.Touch1 && pState.PS)
             {
                 if (GetTouchActive(deviceID) && touchreleased[deviceID])
                 {

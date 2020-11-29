@@ -451,6 +451,24 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flick Threshold.
+        /// </summary>
+        public static string FlickThreshold {
+            get {
+                return ResourceManager.GetString("FlickThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flick Time.
+        /// </summary>
+        public static string FlickTime {
+            get {
+                return ResourceManager.GetString("FlickTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full.
         /// </summary>
         public static string Full {
@@ -595,6 +613,15 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Min Angle Threshold.
+        /// </summary>
+        public static string MinAngleThreshold {
+            get {
+                return ResourceManager.GetString("MinAngleThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps the buttons and axes to a standard gamepad. Maps the Gyro to a virtual mouse.
         /// </summary>
         public static string MixedGyroMousePresetDescription {
@@ -685,6 +712,15 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Controllers Connected (Max {0}).
+        /// </summary>
+        public static string NoControllersConnected {
+            get {
+                return ResourceManager.GetString("NoControllersConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         public static string None {
@@ -753,6 +789,15 @@ namespace DS4WinWPF.Translations {
         public static string QuickCharge {
             get {
                 return ResourceManager.GetString("QuickCharge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Real World Calibration.
+        /// </summary>
+        public static string RealWorldCalibration {
+            get {
+                return ResourceManager.GetString("RealWorldCalibration", resourceCulture);
             }
         }
         

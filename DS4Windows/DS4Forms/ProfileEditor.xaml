@@ -44,33 +44,81 @@
                                     <MenuItem Header="Inverted" Tag="1" CommandParameter="1" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted X" Tag="1" CommandParameter="2" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted Y" Tag="1" CommandParameter="3" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="1" CommandParameter="4" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="1" CommandParameter="5" Click="PresetMenuItem_Click" />
                                 </MenuItem>
                                 <MenuItem Header="Left Stick">
                                     <MenuItem Header="Normal" Tag="2" CommandParameter="0" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted" Tag="2" CommandParameter="1" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted X" Tag="2" CommandParameter="2" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted Y" Tag="2" CommandParameter="3" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="2" CommandParameter="4" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="2" CommandParameter="5" Click="PresetMenuItem_Click" />
                                 </MenuItem>
                                 <MenuItem Header="Right Stick">
                                     <MenuItem Header="Normal" Tag="3" CommandParameter="0" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted" Tag="3" CommandParameter="1" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted X" Tag="3" CommandParameter="2" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted Y" Tag="3" CommandParameter="3" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="3" CommandParameter="4" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="3" CommandParameter="5" Click="PresetMenuItem_Click" />
                                 </MenuItem>
-                                <MenuItem Header="Face Buttons" Tag="4" Click="PresetMenuItem_Click" />
-                                <MenuItem Header="WASD" Tag="5" Click="PresetMenuItem_Click" />
-                                <MenuItem Header="Arrow Keys" Tag="6" Click="PresetMenuItem_Click" />
+                                <MenuItem Header="Face Buttons">
+                                    <MenuItem Header="Normal" Tag="4" CommandParameter="0" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="4" CommandParameter="1" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="4" CommandParameter="2" Click="PresetMenuItem_Click" />
+                                </MenuItem>
+                                <MenuItem Header="WASD">
+                                    <MenuItem Header="Normal" Tag="5" CommandParameter="0" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="5" CommandParameter="1" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="5" CommandParameter="2" Click="PresetMenuItem_Click" />
+                                </MenuItem>
+                                <MenuItem Header="Arrow Keys">
+                                    <MenuItem Header="Normal" Tag="6" CommandParameter="0" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="6" CommandParameter="1" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="6" CommandParameter="2" Click="PresetMenuItem_Click" />
+                                </MenuItem>
                                 <MenuItem Header="Mouse">
                                     <MenuItem Header="Normal" Tag="7" CommandParameter="0" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted" Tag="7" CommandParameter="1" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted X" Tag="7" CommandParameter="2" Click="PresetMenuItem_Click" />
                                     <MenuItem Header="Inverted Y" Tag="7" CommandParameter="3" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate 90&#xb0;" Tag="7" CommandParameter="4" Click="PresetMenuItem_Click" />
+                                    <MenuItem Header="Rotate -90&#xb0;" Tag="7" CommandParameter="5" Click="PresetMenuItem_Click" />
                                 </MenuItem>
                                 <MenuItem Header="Unbound" Tag="8" Click="PresetMenuItem_Click" />
                             </ContextMenu>
                         </Canvas.Resources>
 
                         <Image Source="/DS4Windows;component/Resources/DS4 Config.png" Width="440" Height="220" Stretch="Uniform"/>
+
+                        <Button x:Name="ds4LightbarColorBtn" Width="138" Height="12" Canvas.Left="150" Canvas.Top="28"
+                                Background="{x:Null}" BorderBrush="{x:Null}" MouseEnter="Ds4LightbarColorBtn_MouseEnter" MouseLeave="Ds4LightbarColorBtn_MouseLeave" Click="Ds4LightbarColorBtn_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{x:Null}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Rectangle x:Name="lightbarRect" Fill="{Binding LightbarBrush,FallbackValue=Green}" Width="{Binding Path=Width, ElementName=ds4LightbarColorBtn}"
+                                       Height="{Binding Path=Height, ElementName=ds4LightbarColorBtn}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/DS4Windows;component/Resources/DS4 lightbar.png" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
 
                         <Image x:Name="picBoxHover" IsEnabled="False" Source="/DS4Windows;component/Resources/DS4-Config_RS.png" Height="48" Width="48" Canvas.Left="447" Canvas.Top="5" />
                         <Image x:Name="picBoxHover2" IsEnabled="False" Source="/DS4Windows;component/Resources/DS4-Config_RS.png" Height="48" Width="48" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" />
@@ -131,164 +179,20 @@
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
                             </Label.Foreground>
                         </Label>
-
-                        <Button x:Name="ds4LightbarColorBtn" Width="138" Height="12" Canvas.Left="150" Canvas.Top="28"
-                                Background="{x:Null}" BorderBrush="{x:Null}" MouseEnter="Ds4LightbarColorBtn_MouseEnter" MouseLeave="Ds4LightbarColorBtn_MouseLeave" Click="Ds4LightbarColorBtn_Click">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Background="{TemplateBinding Background}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="{x:Null}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <Rectangle x:Name="lightbarRect" Fill="{Binding LightbarBrush,FallbackValue=Green}" Width="{Binding Path=Width, ElementName=ds4LightbarColorBtn}"
-                                       Height="{Binding Path=Height, ElementName=ds4LightbarColorBtn}">
-                                <Rectangle.OpacityMask>
-                                    <ImageBrush ImageSource="/DS4Windows;component/Resources/DS4 lightbar.png" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
                     </Canvas>
 
-                    <StackPanel Orientation="Horizontal" Height="210" DockPanel.Dock="Bottom" Margin="10">
-                        <StackPanel x:Name="touchpadSettingsPanel" Width="240" Background="White">
-                            <GroupBox Header="Touchpad">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,7,0,7">
-                                        <RadioButton x:Name="useTouchMouseRadio" Content="Use As Mouse" GroupName="tpMode" Click="UseTouchMouseRadio_Click" />
-                                        <RadioButton x:Name="useTouchControlsRadio" Content="Use As Controls" GroupName="tpMode" Click="UseTouchControlsRadio_Click" Margin="10,0,0,0"
-                                                     ToolTip="{lex:Loc Resources:UsingTPSwipes}" />
-                                    </StackPanel>
-
-                                    <StackPanel x:Name="useMousePanel" Visibility="Visible">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="53"/>
-                                                <ColumnDefinition Width="42"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="24" />
-                                                <RowDefinition Height="24" />
-                                                <RowDefinition Height="24" />
-                                            </Grid.RowDefinitions>
-                                            
-                                            <CheckBox Content="{lex:Loc TouchSlide}" Grid.Row="0" Grid.Column="0" IsChecked="{Binding TouchSenExists}" VerticalAlignment="Center" />
-                                            <xctk:IntegerUpDown d:IsHidden="True" Grid.Row="0" Grid.Column="1" MinWidth="40" Height="20" Maximum="500" Value="{Binding TouchSens}" IsEnabled="{Binding TouchSenExists}" />
-                                            <CheckBox Content="Jitter Compensation" Grid.Row="0" Grid.Column="2" IsChecked="{Binding TouchJitter}" VerticalAlignment="Center" Margin="7,0,0,0"
-                                                          ToolTip="{lex:Loc Resources:Jitter}" />
-
-                                            <CheckBox Content="{lex:Loc TouchTap}" Grid.Row="1" Grid.Column="0" IsChecked="{Binding TouchTapExists}" VerticalAlignment="Center" />
-                                            <xctk:IntegerUpDown Value="{Binding TouchTap}" Grid.Row="1" Grid.Column="1" d:IsHidden="True" MinWidth="40" Height="20" IsEnabled="{Binding TouchTapExists}" />
-                                            <CheckBox Content="Double Tap" Grid.Row="1" Grid.Column="2" IsChecked="{Binding TouchDoubleTap}" VerticalAlignment="Center" Margin="7,0,0,0"
-                                                          ToolTip="{lex:Loc Resources:TapAndHold}" />
-
-                                            <CheckBox Content="{lex:Loc TouchScroll}" Grid.Row="2" Grid.Column="0" IsChecked="{Binding TouchScrollExists}" VerticalAlignment="Center" />
-                                            <xctk:IntegerUpDown Value="{Binding TouchScroll}" Grid.Row="2" Grid.Column="1" d:IsHidden="True" MinWidth="40" Height="20" IsEnabled="{Binding TouchScrollExists}" />
-                                            <CheckBox Content="Lower Right as RMB" Grid.Row="2" Grid.Column="2" IsChecked="{Binding LowerRightTouchRMB}" VerticalAlignment="Center"
-                                                          ToolTip="{lex:Loc Resources:BestUsedRightSide}" Margin="7,0,0,0" />
-                                        </Grid>
-
-                                        <StackPanel Orientation="Horizontal" Height="20">
-                                            <CheckBox Content="Start with Slide/Scroll Off" IsChecked="{Binding StartTouchpadOff}" VerticalAlignment="Center"
-                                                    ToolTip="{lex:Loc Resources:TouchpadOffTip}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Height="20">
-                                            <CheckBox Content="Trackball" IsChecked="{Binding TouchTrackball}" VerticalAlignment="Center" />
-                                            <Label Content="Friction:" Padding="0" Margin="20,0,5,0" VerticalAlignment="Center"/>
-                                            <xctk:DoubleUpDown x:Name="frictionUD" d:IsHidden="True" IsEnabled="{Binding TouchTrackball}" Minimum="0.1" Maximum="10.0"
-                                                               Value="{Binding TouchTrackballFriction,FallbackValue=10}" ValueChanged="FrictionUD_ValueChanged" />
-                                        </StackPanel>
-                                        
-                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                                            <StackPanel Orientation="Vertical" MinWidth="80" Margin="20,0,0,0">
-                                                <Label Content="Invert" Padding="0" HorizontalAlignment="Center" />
-                                                <ComboBox MinWidth="50" SelectedIndex="{Binding TouchInvertIndex}">
-                                                    <ComboBoxItem Content="None" />
-                                                    <ComboBoxItem Content="X" />
-                                                    <ComboBoxItem Content="Y" />
-                                                    <ComboBoxItem Content="X+Y" />
-                                                </ComboBox>
-                                            </StackPanel>
-
-                                            <StackPanel Orientation="Vertical" MinWidth="80" Margin="30,0,0,0">
-                                                <Label Content="Disable Invert" Padding="0" HorizontalAlignment="Center" />
-                                                <Button x:Name="touchDisInvertBtn" Height="22" Content="{Binding TouchDisInvertString,FallbackValue=None}" Click="TouchDisInvertBtn_Click">
-                                                    <Button.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Cross" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Circle" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Square" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Triangle" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="L1" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="L2" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="R1" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="R2" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Up" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Down" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Left" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Right" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="L3" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="R3" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Finger on Touchpad" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="2 Fingers on Touchpad" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Options" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="Share" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                            <MenuItem Header="PS" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
-                                                        </ContextMenu>
-                                                    </Button.ContextMenu>
-                                                </Button>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </StackPanel>
-
-                                    <StackPanel x:Name="useControlsPanel" Margin="0,10,0,0" Visibility="Collapsed">
-                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
-                                            <Button x:Name="swipeUpBtn" Content="Swipe Up" Width="70" Tag="36" Click="SwipeControlsButton_Click" />
-                                            <Label x:Name="swipeUpLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="5,8,0,0">
-                                            <Button x:Name="swipeDownBtn" Content="Swipe Down" Width="70" Tag="37" Click="SwipeControlsButton_Click" />
-                                            <Label x:Name="swipeDownLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="5,8,0,0">
-                                            <Button x:Name="swipeLeftBtn" Content="Swipe Left" Width="70" Tag="34" Click="SwipeControlsButton_Click" />
-                                            <Label x:Name="swipeLeftLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="5,8,0,10">
-                                            <Button x:Name="swipeRightBtn" Content="Swipe Right" Width="70" Tag="35" Click="SwipeControlsButton_Click" />
-                                            <Label x:Name="swipeRightLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
-                                        </StackPanel>
-                                    </StackPanel>
+                    <ListBox x:Name="mappingListBox" DockPanel.Dock="Bottom" Height="200" ItemsSource="{Binding Mappings}"
+                                SelectedIndex="{Binding SelectedIndex}" Margin="6" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                MouseDoubleClick="MappingListBox_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding ControlName,StringFormat='\{0\}: '}" />
+                                    <TextBlock Text="{Binding MappingName}"/>
                                 </StackPanel>
-
-                            </GroupBox>
-                        </StackPanel>
-
-                        <ListBox x:Name="mappingListBox" ItemsSource="{Binding Mappings}"
-                                 SelectedIndex="{Binding SelectedIndex}" Width="170" Margin="10,0,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 MouseDoubleClick="MappingListBox_MouseDoubleClick">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding ControlName,StringFormat='\{0\}: '}" />
-                                        <TextBlock Text="{Binding MappingName}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </DockPanel>
             </TabItem>
             <TabItem x:Name="specialActionsTab" Header="Special Actions">
@@ -340,152 +244,298 @@
                 </TabItem.Resources>
                 <ScrollViewer>
                     <StackPanel>
-                        <GroupBox Header="LS &amp; RS">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}"/>
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                    <RowDefinition Style="{StaticResource gridRowHeight}" />
-                                </Grid.RowDefinitions>
+                        <GroupBox Header="LS">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Output Mode" />
+                                    <ComboBox MinWidth="160" SelectedIndex="{Binding LSOutputIndex,FallbackValue='0'}" VerticalContentAlignment="Center" Margin="10,0,0,0">
+                                        <ComboBoxItem Content="None" />
+                                        <ComboBoxItem Content="Controls" />
+                                        <ComboBoxItem Content="Flick Stick" />
+                                    </ComboBox>
+                                </StackPanel>
 
-                                <TextBlock Text="LS" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,8"/>
-                                <TextBlock Text="RS" Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,8"/>
+                                <TabControl SelectedIndex="{Binding LSOutputIndex,Mode=OneWay,FallbackValue='0'}" BorderBrush="{x:Null}">
+                                    <TabItem Header="None"  Visibility="Collapsed" />
+                                    <TabItem Header="Controls" Visibility="Collapsed">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}"/>
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                            </Grid.RowDefinitions>
 
-                                <Label Content="Dead Zone:" Grid.Row="1" Grid.Column="0" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSDeadZone,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSDeadZone,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="2" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-
-                                <Label Content="Max Zone:" Grid.Row="2" Grid.Column="0" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSMaxZone}" FormatString="F2" MinWidth="50" Grid.Row="2" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSMaxZone}" FormatString="F2" MinWidth="50" Grid.Row="2" Grid.Column="2" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-
-                                <Label Content="Anti-dead Zone:" Grid.Row="3" Grid.Column="0" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSAntiDeadZone}" FormatString="F2" MinWidth="50" Grid.Row="3" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSAntiDeadZone}" FormatString="F2" MinWidth="50" Grid.Row="3" Grid.Column="2" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                            <Label Content="Dead Zone:" Grid.Row="0" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSDeadZone,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="0" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
                                                    Margin="{StaticResource spaceMargin}" />
 
-                                <Label Content="Max Output:" Grid.Row="4" Grid.Column="0" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSMaxOutput}" FormatString="F2" MinWidth="50" Grid.Row="4" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSMaxOutput}" FormatString="F2" MinWidth="50" Grid.Row="4" Grid.Column="2" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                            <Label Content="Max Zone:" Grid.Row="1" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSMaxZone}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
                                                    Margin="{StaticResource spaceMargin}" />
 
-                                <Label Content="Sensitivity:" Grid.Row="5" Grid.Column="0" />
-                                <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding LSSens}" MinWidth="50" Grid.Row="5" Grid.Column="1" Maximum="5.0" Minimum="0.5" Increment="0.1"
-                                                   Margin="{StaticResource spaceMargin}" />
-                                <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding RSSens}" MinWidth="50" Grid.Row="5" Grid.Column="2" Maximum="5.0" Minimum="0.5" Increment="0.1"
+                                            <Label Content="Anti-dead Zone:" Grid.Row="2" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSAntiDeadZone}" FormatString="F2" MinWidth="50" Grid.Row="2" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
                                                    Margin="{StaticResource spaceMargin}" />
 
-                                <Label Content="Output Curve:" Grid.Row="6" Grid.Column="0" />
-                                <ComboBox Grid.Row="6" Grid.Column="1" SelectedIndex="{Binding LSOutputCurveIndex}"
+                                            <Label Content="Max Output:" Grid.Row="3" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSMaxOutput}" FormatString="F2" MinWidth="50" Grid.Row="3" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Sensitivity:" Grid.Row="4" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding LSSens}" MinWidth="50" Grid.Row="4" Grid.Column="1" Maximum="5.0" Minimum="0.5" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Output Curve:" Grid.Row="5" Grid.Column="0" />
+                                            <ComboBox Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding LSOutputCurveIndex}"
                                           Margin="{StaticResource spaceMargin}">
-                                    <ComboBoxItem Content="Linear" />
-                                    <ComboBoxItem Content="Enhanced Precision" />
-                                    <ComboBoxItem Content="Quadratic" />
-                                    <ComboBoxItem Content="Cubic" />
-                                    <ComboBoxItem Content="Easeout Quad" />
-                                    <ComboBoxItem Content="Easeout Cubic" />
-                                    <ComboBoxItem Content="Custom" />
-                                </ComboBox>
-                                <ComboBox Grid.Row="6" Grid.Column="2" SelectedIndex="{Binding RSOutputCurveIndex}"
-                                          Margin="{StaticResource spaceMargin}">
-                                    <ComboBoxItem Content="Linear" />
-                                    <ComboBoxItem Content="Enhanced Precision" />
-                                    <ComboBoxItem Content="Quadratic" />
-                                    <ComboBoxItem Content="Cubic" />
-                                    <ComboBoxItem Content="Easeout Quad" />
-                                    <ComboBoxItem Content="Easeout Cubic" />
-                                    <ComboBoxItem Content="Custom" />
-                                </ComboBox>
+                                                <ComboBoxItem Content="Linear" />
+                                                <ComboBoxItem Content="Enhanced Precision" />
+                                                <ComboBoxItem Content="Quadratic" />
+                                                <ComboBoxItem Content="Cubic" />
+                                                <ComboBoxItem Content="Easeout Quad" />
+                                                <ComboBoxItem Content="Easeout Cubic" />
+                                                <ComboBoxItem Content="Custom" />
+                                            </ComboBox>
 
-                                <DockPanel Grid.Row="7" Grid.Column="1" IsEnabled="{Binding LSCustomCurveSelected}">
-                                    <Button x:Name="lsCustomEditorBtn" Content="..." Tag="LS" Width="20" DockPanel.Dock="Right" Click="CustomEditorBtn_Click"
+                                            <DockPanel Grid.Row="6" Grid.Column="1" IsEnabled="{Binding LSCustomCurveSelected}">
+                                                <Button x:Name="lsCustomEditorBtn" Content="..." Tag="LS" Width="20" DockPanel.Dock="Right" Click="CustomEditorBtn_Click"
                                             Margin="{StaticResource spaceMargin}" />
-                                    <TextBox Text="{Binding LSCustomCurve,UpdateSourceTrigger=LostFocus,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left"
+                                                <TextBox Text="{Binding LSCustomCurve,UpdateSourceTrigger=LostFocus,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left"
                                              Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
-                                <DockPanel Grid.Row="7" Grid.Column="2" IsEnabled="{Binding RSCustomCurveSelected}">
-                                    <Button x:Name="rsCustomEditorBtn" Content="..." Tag="RS" Width="20" DockPanel.Dock="Right" Click="CustomEditorBtn_Click"
-                                            Margin="{StaticResource spaceMargin}" />
-                                    <TextBox Text="{Binding RSCustomCurve,UpdateSourceTrigger=LostFocus,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left"
-                                             Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
+                                            </DockPanel>
 
-                                <Label Content="Square Stick:" Grid.Row="8" Grid.Column="0" />
-                                <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right">
-                                    <CheckBox IsChecked="{Binding LSSquareStick}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
-                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F1" Value="{Binding LSSquareRoundness,FallbackValue=5}"
+                                            <Label Content="Square Stick:" Grid.Row="7" Grid.Column="0" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Right">
+                                                <CheckBox IsChecked="{Binding LSSquareStick}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" FormatString="F1" Value="{Binding LSSquareRoundness,FallbackValue=5}"
                                                        MinWidth="100" Minimum="0.0" Maximum="1000.0" Increment="1.0" IsEnabled="{Binding LSSquareStick}"
                                                        Margin="{StaticResource spaceMargin}" />
+                                            </StackPanel>
+
+                                            <Label Content="Curve (Input):" Grid.Row="8" Grid.Column="0" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right">
+                                                <xctk:DoubleUpDown d:IsHidden="True" MinWidth="100" Value="{Binding LSCurve}" Minimum="0" Maximum="100"
+                                                       Margin="{StaticResource spaceMargin}" />
+                                                <Label Content="%" />
+                                            </StackPanel>
+
+                                            <Label Content="Rotation:" Grid.Row="9" Grid.Column="0" />
+                                            <DockPanel Grid.Row="9" Grid.Column="1">
+                                                <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding LSRotation}"
+                                                    Minimum="-180" Maximum="180"
+                                                    Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+
+                                            <Label Content="Fuzz:" Grid.Row="10" Grid.Column="0" />
+                                            <DockPanel Grid.Row="10" Grid.Column="1">
+                                                <TextBlock Text="units" DockPanel.Dock="Right" FontSize="10" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
+                                                <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding LSFuzz}"
+                                                    Minimum="0" Maximum="100"
+                                                    Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="FlickStick" Visibility="Collapsed">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                            </Grid.RowDefinitions>
+
+                                            <Label Content="{lex:Loc RealWorldCalibration}" ContentStringFormat="{}{0}:" Grid.Row="0" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSFlickRWC,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="0" Grid.Column="1" Maximum="100.0" Minimum="1.0" Increment="1.0"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="{lex:Loc FlickThreshold}" ContentStringFormat="{}{0}:" Grid.Row="1" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSFlickThreshold,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="{lex:Loc FlickTime}" ContentStringFormat="{}{0}:" Grid.Row="2" Grid.Column="0" />
+                                            <DockPanel Grid.Row="2" Grid.Column="1">
+                                                <TextBlock Text="sec." DockPanel.Dock="Right" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSFlickTime,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Maximum="10.0" Minimum="0.01" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+
+                                            <Label Content="{lex:Loc MinAngleThreshold}" ContentStringFormat="{}{0}:" Grid.Row="3" Grid.Column="0" />
+                                            <DockPanel Grid.Row="3" Grid.Column="1">
+                                                <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding LSMinAngleThreshold,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Maximum="180.0" Minimum="0.0" Increment="0.5"
+                                                   Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+                                            
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                            </StackPanel>
+                            
+                            
+                        </GroupBox>
+
+                        <GroupBox Header="RS">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Output Mode" />
+                                    <ComboBox MinWidth="160" SelectedIndex="{Binding RSOutputIndex,FallbackValue='0'}" VerticalContentAlignment="Center" Margin="10,0,0,0">
+                                        <ComboBoxItem Content="None" />
+                                        <ComboBoxItem Content="Controls" />
+                                        <ComboBoxItem Content="Flick Stick" />
+                                    </ComboBox>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right">
-                                    <CheckBox IsChecked="{Binding RSSquareStick}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
-                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F1" Value="{Binding RSSquareRoundness,FallbackValue=5}"
+
+
+                                <TabControl SelectedIndex="{Binding RSOutputIndex,Mode=OneWay,FallbackValue='0'}" BorderBrush="{x:Null}">
+                                    <TabItem Header="None"  Visibility="Collapsed" />
+                                    <TabItem Header="Controls" Visibility="Collapsed">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}"/>
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                            </Grid.RowDefinitions>
+
+                                            <Label Content="Dead Zone:" Grid.Row="0" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSDeadZone,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="0" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Max Zone:" Grid.Row="1" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSMaxZone}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Anti-dead Zone:" Grid.Row="2" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSAntiDeadZone}" FormatString="F2" MinWidth="50" Grid.Row="2" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Max Output:" Grid.Row="3" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSMaxOutput}" FormatString="F2" MinWidth="50" Grid.Row="3" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Sensitivity:" Grid.Row="4" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding RSSens}" MinWidth="50" Grid.Row="4" Grid.Column="1" Maximum="5.0" Minimum="0.5" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="Output Curve:" Grid.Row="5" Grid.Column="0" />
+                                            <ComboBox Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding RSOutputCurveIndex}"
+                                          Margin="{StaticResource spaceMargin}">
+                                                <ComboBoxItem Content="Linear" />
+                                                <ComboBoxItem Content="Enhanced Precision" />
+                                                <ComboBoxItem Content="Quadratic" />
+                                                <ComboBoxItem Content="Cubic" />
+                                                <ComboBoxItem Content="Easeout Quad" />
+                                                <ComboBoxItem Content="Easeout Cubic" />
+                                                <ComboBoxItem Content="Custom" />
+                                            </ComboBox>
+
+                                            <DockPanel Grid.Row="6" Grid.Column="1" IsEnabled="{Binding RSCustomCurveSelected}">
+                                                <Button x:Name="rsCustomEditorBtn" Content="..." Tag="RS" Width="20" DockPanel.Dock="Right" Click="CustomEditorBtn_Click"
+                                            Margin="{StaticResource spaceMargin}" />
+                                                <TextBox Text="{Binding RSCustomCurve,UpdateSourceTrigger=LostFocus,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left"
+                                             Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+
+                                            <Label Content="Square Stick:" Grid.Row="7" Grid.Column="0" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Right">
+                                                <CheckBox IsChecked="{Binding RSSquareStick}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" FormatString="F1" Value="{Binding RSSquareRoundness,FallbackValue=5}"
                                                        MinWidth="100" Minimum="0.0" Maximum="1000.0" Increment="1.0" IsEnabled="{Binding RSSquareStick}"
                                                        Margin="{StaticResource spaceMargin}" />
-                                </StackPanel>
+                                            </StackPanel>
 
-                                <Label Content="Curve (Input):" Grid.Row="9" Grid.Column="0" />
-                                <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Right">
-                                    <xctk:DoubleUpDown d:IsHidden="True" MinWidth="100" Value="{Binding LSCurve}" Minimum="0" Maximum="100"
-                                                       Margin="{StaticResource spaceMargin}" />
-                                    <Label Content="%" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.Column="2" HorizontalAlignment="Right">
-                                    <xctk:DoubleUpDown d:IsHidden="True" MinWidth="100" Value="{Binding RSCurve}" Minimum="0" Maximum="100"
+                                            <Label Content="Curve (Input):" Grid.Row="8" Grid.Column="0" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right">
+                                                <xctk:DoubleUpDown d:IsHidden="True" MinWidth="100" Value="{Binding RSCurve}" Minimum="0" Maximum="100"
                                                        Margin="{StaticResource spaceMargin}"/>
-                                    <Label Content="%" />
-                                </StackPanel>
+                                                <Label Content="%" />
+                                            </StackPanel>
 
-                                <Label Content="Rotation:" Grid.Row="10" Grid.Column="0" />
-                                <DockPanel Grid.Row="10" Grid.Column="1">
-                                    <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
-                                    <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding LSRotation}"
+                                            <Label Content="Rotation:" Grid.Row="9" Grid.Column="0" />
+                                            <DockPanel Grid.Row="9" Grid.Column="1">
+                                                <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding RSRotation}"
                                                     Minimum="-180" Maximum="180"
                                                     Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
+                                            </DockPanel>
 
-                                <DockPanel Grid.Row="10" Grid.Column="2">
-                                    <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
-                                    <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding RSRotation}"
-                                                    Minimum="-180" Maximum="180"
-                                                    Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
-
-                                <Label Content="Fuzz:" Grid.Row="11" Grid.Column="0" />
-                                <DockPanel Grid.Row="11" Grid.Column="1">
-                                    <TextBlock Text="units" DockPanel.Dock="Right" FontSize="10" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
-                                    <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding LSFuzz}"
+                                            <Label Content="Fuzz:" Grid.Row="10" Grid.Column="0" />
+                                            <DockPanel Grid.Row="10" Grid.Column="1">
+                                                <TextBlock Text="units" DockPanel.Dock="Right" FontSize="10" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
+                                                <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding RSFuzz}"
                                                     Minimum="0" Maximum="100"
                                                     Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
+                                            </DockPanel>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="FlickStick" Visibility="Collapsed">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                                <RowDefinition Style="{StaticResource gridRowHeight}" />
+                                            </Grid.RowDefinitions>
 
-                                <DockPanel Grid.Row="11" Grid.Column="2">
-                                    <TextBlock Text="units" DockPanel.Dock="Right" FontSize="10" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
-                                    <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding RSFuzz}"
-                                                    Minimum="0" Maximum="100"
-                                                    Margin="{StaticResource spaceMargin}" />
-                                </DockPanel>
-                            </Grid>
+                                            <Label Content="{lex:Loc RealWorldCalibration}" ContentStringFormat="{}{0}:" Grid.Row="0" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSFlickRWC,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="0" Grid.Column="1" Maximum="100.0" Minimum="1.0" Increment="1.0"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="{lex:Loc FlickThreshold}" ContentStringFormat="{}{0}:" Grid.Row="1" Grid.Column="0" />
+                                            <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSFlickThreshold,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Grid.Row="1" Grid.Column="1" Maximum="1.0" Minimum="0.0" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+
+                                            <Label Content="{lex:Loc FlickTime}" ContentStringFormat="{}{0}:" Grid.Row="2" Grid.Column="0" />
+                                            <DockPanel Grid.Row="2" Grid.Column="1">
+                                                <TextBlock Text="sec." DockPanel.Dock="Right" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSFlickTime,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Maximum="10.0" Minimum="0.01" Increment="0.1"
+                                                   Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+
+                                            <Label Content="{lex:Loc MinAngleThreshold}" ContentStringFormat="{}{0}:" Grid.Row="3" Grid.Column="0" />
+                                            <DockPanel Grid.Row="3" Grid.Column="1">
+                                                <TextBlock Text="&#xb0;" DockPanel.Dock="Right" FontSize="18" Margin="{StaticResource spaceMargin}" />
+                                                <xctk:DoubleUpDown d:IsHidden="True" Value="{Binding RSMinAngleThreshold,UpdateSourceTrigger=LostFocus}" FormatString="F2" MinWidth="50" Maximum="180.0" Minimum="0.0" Increment="0.5"
+                                                   Margin="{StaticResource spaceMargin}" />
+                                            </DockPanel>
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                            </StackPanel>
+                            
+                            
                         </GroupBox>
 
                         <GroupBox Header="L2 &amp; R2">
@@ -757,6 +807,164 @@
                 </StackPanel>
             </TabItem>
 
+            <TabItem Header="Touchpad">
+                <TabItem.Resources>
+                    <Thickness x:Key="spaceMargin" Bottom="8" />
+                </TabItem.Resources>
+
+                <StackPanel Margin="4">
+                    <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                        <Label Content="Output Mode" />
+                        <ComboBox x:Name="touchpadOutModeCombo" Width="160" SelectedIndex="{Binding TouchpadOutputIndex, FallbackValue='0'}" VerticalContentAlignment="Center" Margin="10,0,0,0">
+                            <ComboBoxItem Content="Mouse" />
+                            <ComboBoxItem Content="Controls" />
+                            <ComboBoxItem Content="Absolute Mouse" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <TabControl x:Name="touchOutputTabControl" SelectedIndex="{Binding TouchpadOutputIndex, FallbackValue='0'}" BorderBrush="{x:Null}" Margin="{StaticResource spaceMargin}">
+                        <TabItem Header="Mouse" Visibility="Collapsed">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="{StaticResource spaceMargin}">
+                                        <CheckBox Content="{lex:Loc TouchSlide}" IsChecked="{Binding TouchSenExists}" VerticalAlignment="Center" />
+                                        <xctk:IntegerUpDown d:IsHidden="True" MinWidth="80" Height="20" Maximum="500" Value="{Binding TouchSens}" IsEnabled="{Binding TouchSenExists}" Margin="8,0,0,0" />
+                                    </StackPanel>
+
+                                    <CheckBox Content="Jitter Compensation" Grid.Row="0" Grid.Column="1" IsChecked="{Binding TouchJitter}" VerticalAlignment="Center"
+                                                          ToolTip="{lex:Loc Resources:Jitter}" />
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="{StaticResource spaceMargin}">
+                                        <CheckBox Content="{lex:Loc TouchTap}" IsChecked="{Binding TouchTapExists}" VerticalAlignment="Center" />
+                                        <xctk:IntegerUpDown Value="{Binding TouchTap}" d:IsHidden="True" MinWidth="80" Height="20" IsEnabled="{Binding TouchTapExists}" Margin="8,0,0,0" />
+                                    </StackPanel>
+
+                                    <CheckBox Content="Double Tap" Grid.Row="1" Grid.Column="1" IsChecked="{Binding TouchDoubleTap}" VerticalAlignment="Center"
+                                                          ToolTip="{lex:Loc Resources:TapAndHold}" />
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="{StaticResource spaceMargin}">
+                                        <CheckBox Content="{lex:Loc TouchScroll}" IsChecked="{Binding TouchScrollExists}" VerticalAlignment="Center" />
+                                        <xctk:IntegerUpDown Value="{Binding TouchScroll}" d:IsHidden="True" MinWidth="80" Height="20" IsEnabled="{Binding TouchScrollExists}" Margin="8,0,0,0" />
+                                    </StackPanel>
+
+                                    <CheckBox Content="Lower Right as RMB" Grid.Row="2" Grid.Column="1" IsChecked="{Binding LowerRightTouchRMB}" VerticalAlignment="Center"
+                                                          ToolTip="{lex:Loc Resources:BestUsedRightSide}" />
+                                </Grid>
+
+                                <CheckBox Content="Start with Slide/Scroll Off" IsChecked="{Binding StartTouchpadOff}" VerticalAlignment="Center"
+                                                    ToolTip="{lex:Loc Resources:TouchpadOffTip}" Margin="{StaticResource spaceMargin}" />
+
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Rotation" ContentStringFormat="{}{0}:" />
+                                    <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Height="20" Minimum="-180" Maximum="180" Increment="1" FormatString="F0" Value="{Binding TouchRelMouseRotation,FallbackValue='0'}" Margin="8,0,0,0" />
+                                    <TextBlock Text="&#xb0;" FontSize="18" Margin="{StaticResource spaceMargin}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Min Threshold" ContentStringFormat="{}{0}:" />
+                                    <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Height="20" Minimum="1.0" Maximum="40.0" Increment="1.0" FormatString="F1" Value="{Binding TouchRelMouseMinThreshold,FallbackValue='1.0'}" Margin="8,0,0,0" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Height="20" Margin="{StaticResource spaceMargin}">
+                                    <CheckBox Content="Trackball" IsChecked="{Binding TouchTrackball}" VerticalAlignment="Center" />
+                                    <Label Content="Friction:" Padding="0" Margin="20,0,5,0" VerticalAlignment="Center"/>
+                                    <xctk:DoubleUpDown x:Name="frictionUD" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchTrackball}" Minimum="0.1" Maximum="10.0"
+                                                               Value="{Binding TouchTrackballFriction,FallbackValue='10'}" ValueChanged="FrictionUD_ValueChanged" Margin="8,0,0,0" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Invert" Padding="0" HorizontalAlignment="Center" />
+                                    <ComboBox MinWidth="160" SelectedIndex="{Binding TouchInvertIndex}" Margin="20,0,0,0">
+                                        <ComboBoxItem Content="None" />
+                                        <ComboBoxItem Content="X" />
+                                        <ComboBoxItem Content="Y" />
+                                        <ComboBoxItem Content="X+Y" />
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Disable Invert" Padding="0" HorizontalAlignment="Center" />
+                                    <Button x:Name="touchDisInvertBtn" MinWidth="160"  Height="22" Content="{Binding TouchDisInvertString,FallbackValue=None}" Click="TouchDisInvertBtn_Click" Margin="20,0,0,0">
+                                        <Button.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Cross" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Circle" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Square" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Triangle" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="L1" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="L2" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="R1" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="R2" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Up" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Down" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Left" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Right" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="L3" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="R3" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Finger on Touchpad" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="2 Fingers on Touchpad" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Options" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Share" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="PS" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                                <MenuItem Header="Touchpad Click" IsCheckable="True" Click="TouchDisInvertMenuItem_Click" />
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                    </Button>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="Controls" Visibility="Collapsed">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                                    <Button x:Name="swipeUpBtn" Content="Swipe Up" MinWidth="100" Tag="36" Click="SwipeControlsButton_Click" />
+                                    <Label x:Name="swipeUpLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8,0,0">
+                                    <Button x:Name="swipeDownBtn" Content="Swipe Down" MinWidth="100" Tag="37" Click="SwipeControlsButton_Click" />
+                                    <Label x:Name="swipeDownLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8,0,0">
+                                    <Button x:Name="swipeLeftBtn" Content="Swipe Left" MinWidth="100" Tag="34" Click="SwipeControlsButton_Click" />
+                                    <Label x:Name="swipeLeftLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8,0,10">
+                                    <Button x:Name="swipeRightBtn" Content="Swipe Right" MinWidth="100" Tag="35" Click="SwipeControlsButton_Click" />
+                                    <Label x:Name="swipeRightLb" Content="{Binding MappingName,FallbackValue=Unassigned}"  Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="Absolute Mouse" Visibility="Collapsed">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Max Zone X:" />
+                                    <xctk:IntegerUpDown d:IsHidden="True" MinWidth="80" Height="20" Minimum="0" Maximum="100" Value="{Binding TouchAbsMouseMaxZoneX}" Margin="8,0,0,0" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Max Zone Y:" />
+                                    <xctk:IntegerUpDown d:IsHidden="True" MinWidth="80" Height="20" Minimum="0" Maximum="100" Value="{Binding TouchAbsMouseMaxZoneY}" Margin="8,0,0,0" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                                    <Label Content="Snap To Center on Release:" />
+                                    <CheckBox IsChecked="{Binding TouchAbsMouseSnapCenter}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </TabItem>
+
             <TabItem Header="Gyro">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
@@ -827,6 +1035,14 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <Label Content="Fuzz:" />
+                                    <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding SASteeringWheelFuzz}"
+                                                    Minimum="0" Maximum="100"
+                                                    Margin="{StaticResource spaceMargin}" />
+                                    <TextBlock Text="units" FontSize="10" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <CheckBox Content="Use Smoothing" IsChecked="{Binding SASteeringWheelUseSmoothing}" />
                                 </StackPanel>
 
@@ -872,6 +1088,7 @@
                                         <MenuItem Header="Options" IsCheckable="True" Click="GyroMouseTrigMenuItem_Click" />
                                         <MenuItem Header="Share" IsCheckable="True" Click="GyroMouseTrigMenuItem_Click" />
                                         <MenuItem Header="PS" IsCheckable="True" Click="GyroMouseTrigMenuItem_Click" />
+                                        <MenuItem Header="Touchpad Click" IsCheckable="True" Click="GyroMouseTrigMenuItem_Click" />
                                         <MenuItem Header="Always On" IsCheckable="True" Click="GyroMouseTrigMenuItem_Click" />
                                     </ContextMenu>
                                 </Button.ContextMenu>
@@ -921,6 +1138,11 @@
                             <Label Content="Deadzone" />
                             <xctk:IntegerUpDown d:IsHidden="True" MinWidth="60" Margin="8,0,0,0"
                                                 Value="{Binding GyroMouseDeadZone}" Minimum="0" Maximum="1000" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
+                            <Label Content="Min Threshold" ContentStringFormat="{}{0}:" />
+                            <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Height="20" Minimum="1.0" Maximum="40.0" Increment="1.0" FormatString="F1" Value="{Binding GyroMouseMinThreshold,FallbackValue='1.0'}" Margin="8,0,0,0" />
                         </StackPanel>
 
                         <CheckBox Content="Toggle" IsChecked="{Binding GyroMouseToggle}" Margin="{StaticResource spaceMargin}" />
@@ -981,6 +1203,7 @@
                                         <MenuItem Header="Options" IsCheckable="True" Click="GyroMouseStickTrigMenuItem_Click" />
                                         <MenuItem Header="Share" IsCheckable="True" Click="GyroMouseStickTrigMenuItem_Click" />
                                         <MenuItem Header="PS" IsCheckable="True" Click="GyroMouseStickTrigMenuItem_Click" />
+                                        <MenuItem Header="Touchpad Click" IsCheckable="True" Click="GyroMouseStickTrigMenuItem_Click" />
                                         <MenuItem Header="Always On" IsCheckable="True" Click="GyroMouseStickTrigMenuItem_Click" />
                                     </ContextMenu>
                                 </Button.ContextMenu>

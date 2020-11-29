@@ -157,7 +157,7 @@
     <value>Check For Update Now</value>
   </data>
   <data name="CheckUpdateStartup" xml:space="preserve">
-    <value>Check for DS4Windows Updates at Startup</value>
+    <value>Check for updates at DS4Windows startup</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
@@ -420,5 +420,20 @@ Example: whyme_DS4Windows</value>
   </data>
   <data name="Profiles" xml:space="preserve">
     <value>Profiles</value>
+  </data>
+  <data name="NoControllersConnected" xml:space="preserve">
+    <value>No Controllers Connected (Max {0})</value>
+  </data>
+  <data name="FlickThreshold" xml:space="preserve">
+    <value>Flick Threshold</value>
+  </data>
+  <data name="FlickTime" xml:space="preserve">
+    <value>Flick Time</value>
+  </data>
+  <data name="MinAngleThreshold" xml:space="preserve">
+    <value>Min Angle Threshold</value>
+  </data>
+  <data name="RealWorldCalibration" xml:space="preserve">
+    <value>Real World Calibration</value>
   </data>
 </root>
