@@ -31,6 +31,19 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private Dictionary<DS4Controls, MappedControl> controlMap = new Dictionary<DS4Controls, MappedControl>();
         public Dictionary<DS4Controls, MappedControl> ControlMap { get => controlMap; }
 
+        private MappedControl l2FullPullControl;
+        public MappedControl L2FullPullControl { get => l2FullPullControl; }
+
+        private MappedControl r2FullPullControl;
+        public MappedControl R2FullPullControl { get => r2FullPullControl; }
+
+        private MappedControl gyroSwipeLeftControl;
+        private MappedControl gyroSwipeRightControl;
+        private MappedControl gyroSwipeUpControl;
+        private MappedControl gyroSwipeDownControl;
+
+        private List<MappedControl> extraControls = new List<MappedControl>();
+
         public MappingListViewModel(int devIndex, OutContType devType)
         {
             mappings.Add(new MappedControl(devIndex, DS4Controls.Cross, "Cross",  devType));
@@ -44,6 +57,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             mappings.Add(new MappedControl(devIndex, DS4Controls.DpadLeft, "Left", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.DpadRight, "Right", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.PS, "PS", devType));
+            mappings.Add(new MappedControl(devIndex, DS4Controls.Mute, "Mute", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.L1, "L1", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.R1, "R1", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.L2, "L2", devType));
@@ -79,6 +93,28 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 controlMap.Add(mapped.Control, mapped);
             }
+
+            l2FullPullControl = new MappedControl(devIndex, DS4Controls.L2FullPull, "L2 Full Pull", devType);
+            r2FullPullControl = new MappedControl(devIndex, DS4Controls.R2FullPull, "R2 Full Pull", devType);
+
+            gyroSwipeLeftControl = new MappedControl(devIndex, DS4Controls.GyroSwipeLeft, "Gyro Swipe Left", devType);
+            gyroSwipeRightControl = new MappedControl(devIndex, DS4Controls.GyroSwipeRight, "Gyro Swipe Right", devType);
+            gyroSwipeUpControl = new MappedControl(devIndex, DS4Controls.GyroSwipeUp, "Gyro Swipe Up", devType);
+            gyroSwipeDownControl = new MappedControl(devIndex, DS4Controls.GyroSwipeDown, "Gyro Swipe Down", devType);
+
+            extraControls.Add(l2FullPullControl);
+            extraControls.Add(r2FullPullControl);
+            extraControls.Add(gyroSwipeLeftControl);
+            extraControls.Add(gyroSwipeRightControl);
+            extraControls.Add(gyroSwipeUpControl);
+            extraControls.Add(gyroSwipeDownControl);
+
+            controlMap.Add(DS4Controls.L2FullPull, l2FullPullControl);
+            controlMap.Add(DS4Controls.R2FullPull, r2FullPullControl);
+            controlMap.Add(DS4Controls.GyroSwipeLeft, gyroSwipeLeftControl);
+            controlMap.Add(DS4Controls.GyroSwipeRight, gyroSwipeRightControl);
+            controlMap.Add(DS4Controls.GyroSwipeUp, gyroSwipeUpControl);
+            controlMap.Add(DS4Controls.GyroSwipeDown, gyroSwipeDownControl);
         }
 
         public void UpdateMappingDevType(OutContType devType)
@@ -87,11 +123,21 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 mapped.DevType = devType;
             }
+
+            foreach(MappedControl mapped in extraControls)
+            {
+                mapped.DevType = devType;
+            }
         }
 
         public void UpdateMappings()
         {
             foreach (MappedControl mapped in mappings)
+            {
+                mapped.UpdateMappingName();
+            }
+
+            foreach (MappedControl mapped in extraControls)
             {
                 mapped.UpdateMappingName();
             }
@@ -206,7 +252,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
             }
             else if (!extra && !shift)
-                temp = Global.getX360ControlString(Global.defaultButtonMapping[(int)control], devType);
+            {
+                X360Controls tempOutControl = Global.defaultButtonMapping[(int)control];
+                if (tempOutControl != X360Controls.None)
+                {
+                    temp = Global.getX360ControlString(tempOutControl, devType);
+                }
+            }
             else if (shift)
                 temp = "";
 

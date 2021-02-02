@@ -103,7 +103,6 @@
       <HintPath>..\packages\Ookii.Dialogs.Wpf.1.1.0\lib\net45\Ookii.Dialogs.Wpf.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -154,6 +153,7 @@
     <Compile Include="BezierCurveEditor\BezierCurve.cs" />
     <Compile Include="DS4Control\ControllerSlotManager.cs" />
     <Compile Include="DS4Control\ControlService.cs" />
+    <Compile Include="DS4Control\ControlServiceDeviceOptions.cs" />
     <Compile Include="DS4Control\DS4LightBar.cs" />
     <Compile Include="DS4Control\DS4StateFieldMapping.cs" />
     <Compile Include="DS4Control\InputMethods.cs" />
@@ -195,6 +195,10 @@
     <Compile Include="DS4Forms\ControllerReadingsControl.xaml.cs">
       <DependentUpon>ControllerReadingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DS4Forms\ControllerRegisterOptionsWindow.xaml.cs">
+      <DependentUpon>ControllerRegisterOptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DS4Forms\Converters\InvertBoolToVisibilityConverter.cs" />
     <Compile Include="DS4Forms\DupBox.xaml.cs">
       <DependentUpon>DupBox.xaml</DependentUpon>
     </Compile>
@@ -236,6 +240,7 @@
     <Compile Include="DS4Forms\ViewModels\BindingWindowViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\ChangelogViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\ControllerListViewModel.cs" />
+    <Compile Include="DS4Forms\ViewModels\ControllerRegDeviceOptsViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\CurrentOutDeviceViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\LanguagePackViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\MainWindowsViewModel.cs" />
@@ -273,6 +278,7 @@
     <Compile Include="DS4Library\InputDevices\InputDeviceFactory.cs" />
     <Compile Include="DS4Library\InputDevices\JoyConDevice.cs" />
     <Compile Include="DS4Library\InputDevices\SwitchProDevice.cs" />
+    <Compile Include="DS4Library\InputDevices\TriggerEffects.cs" />
     <Compile Include="HidLibrary\Extensions.cs" />
     <Compile Include="HidLibrary\HidDevice.cs" />
     <Compile Include="HidLibrary\HidDeviceAttributes.cs" />
@@ -316,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DS4Forms\ControllerReadingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DS4Forms\ControllerRegisterOptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -525,6 +535,13 @@
     <Content Include="BezierCurveEditor\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\DS4 Config_white.png" />
+    <Resource Include="Resources\newprofile_white.png" />
+    <Resource Include="Resources\copy_white.png" />
+    <Resource Include="Resources\delete_white.png" />
+    <Resource Include="Resources\edit_white.png" />
+    <Resource Include="Resources\export_white.png" />
+    <Resource Include="Resources\import_white.png" />
     <Resource Include="Resources\clock_white.png" />
     <Resource Include="Resources\BT_white.png" />
     <Resource Include="Resources\cancel_white.png" />
@@ -600,7 +617,7 @@
     <PostBuildEvent>rem Copy compiled l18n assemblies to alt folder
 GOTO END
 if not exist $(TargetDir)Lang mkdir $(TargetDir)Lang
-set langs=cs de es fr it ja nl pt-BR ru zh-CN zh-TW uk-UA hu-HU pl ar
+set langs=cs de es fr he it ja nl pt-BR ru zh-CN zh-TW uk-UA hu-HU pl ar
 
 for %25%25l in (%25langs%25) do (
   xcopy $(TargetDir)%25%25l $(TargetDir)Lang\%25%25l\ /s /y

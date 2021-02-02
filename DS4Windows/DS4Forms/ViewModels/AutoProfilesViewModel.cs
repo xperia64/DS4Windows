@@ -189,7 +189,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             foreach (string target in exepaths)
             {
-                bool skip = !File.Exists(target) || Path.GetExtension(target) != ".exe";
+                bool skip = !File.Exists(target) || Path.GetExtension(target).ToLower() != ".exe";
                 skip = skip || (skipsetupapps && (target.Contains("etup") || target.Contains("dotnet") || target.Contains("SETUP")
                     || target.Contains("edist") || target.Contains("nstall") || string.IsNullOrEmpty(target)));
                 skip = skip || (checkexisting && existingapps.Contains(target));
@@ -419,7 +419,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private ImageSource exeicon;
         private bool turnoff;
 
-        public string Path { get => path; set => path = value; }
+        public string Path { get => path;
+            set
+            {
+                if (path == value) return;
+                path = value;
+                if (matchedAutoProfile != null)
+                {
+                    matchedAutoProfile.Path = value;
+                }
+            }
+        }
+
         public string Title { get => title;
             set
             {
@@ -433,6 +444,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 TitleChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
         public event EventHandler TitleChanged;
         public AutoProfileEntity MatchedAutoProfile
         {

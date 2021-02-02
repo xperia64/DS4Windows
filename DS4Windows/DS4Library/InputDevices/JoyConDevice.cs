@@ -6,9 +6,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DS4Windows;
 
-namespace DS4WinWPF.DS4Library.InputDevices
+namespace DS4Windows.InputDevices
 {
     public class JoyConDevice : DS4Device
     {
@@ -211,6 +210,11 @@ namespace DS4WinWPF.DS4Library.InputDevices
         private double combLatency;
         public double CombLatency { get => combLatency; set => combLatency = value; }
 
+        private bool enableHomeLED = true;
+        public bool EnableHomeLED { get => enableHomeLED; set => enableHomeLED = value; }
+
+        private JoyConControllerOptions nativeOptionsStore;
+
         public override event ReportHandler<EventArgs> Report = null;
         public override event EventHandler<EventArgs> Removal = null;
         public override event EventHandler BatteryChanged;
@@ -222,6 +226,9 @@ namespace DS4WinWPF.DS4Library.InputDevices
         {
             runCalib = false;
             synced = true;
+            DeviceSlotNumberChanged += (sender, e) => {
+                CalculateDeviceSlotMask();
+            };
         }
 
         private JoyConSide DetermineSideType()
@@ -243,8 +250,21 @@ namespace DS4WinWPF.DS4Library.InputDevices
         public override void PostInit()
         {
             sideType = DetermineSideType();
+            if (sideType == JoyConSide.Left)
+            {
+                deviceType = InputDeviceType.JoyConL;
+            }
+            else if (sideType == JoyConSide.Right)
+            {
+                deviceType = InputDeviceType.JoyConR;
+            }
+
             conType = ConnectionType.BT;
             warnInterval = WARN_INTERVAL_BT;
+
+            gyroMouseSensSettings = new GyroMouseSens();
+            optionsStore = nativeOptionsStore = new JoyConControllerOptions(deviceType);
+            SetupOptionsEvents();
 
             inputReportBuffer = new byte[INPUT_REPORT_LEN];
             outputReportBuffer = new byte[OUTPUT_REPORT_LEN];
@@ -665,7 +685,7 @@ namespace DS4WinWPF.DS4Library.InputDevices
             byte[] powerChoiceArray = new byte[] { 0x00 };
             Subcommand(SwitchProSubCmd.SET_LOW_POWER_STATE, powerChoiceArray, 1, checkResponse: true);
 
-            if (sideType == JoyConSide.Right)
+            if (sideType == JoyConSide.Right && enableHomeLED)
             {
                 // Turn on Home light (Solid)
                 byte[] light = Enumerable.Repeat((byte)0xFF, 25).ToArray();
@@ -675,7 +695,7 @@ namespace DS4WinWPF.DS4Library.InputDevices
             }
 
             // Turn on bottom LEDs
-            byte[] leds = new byte[] { 0x01 };
+            byte[] leds = new byte[] { deviceSlotMask };
             //Thread.Sleep(1000);
             Subcommand(0x30, leds, 1, checkResponse: true);
 
@@ -801,13 +821,13 @@ namespace DS4WinWPF.DS4Library.InputDevices
             double tempRatio;
             if (sideType == JoyConSide.Left)
             {
-                tempRatio = currentHap.RumbleMotorStrengthLeftHeavySlow / 255.0;
+                tempRatio = currentHap.rumbleState.RumbleMotorStrengthLeftHeavySlow / 255.0;
                 dirty = tempRatio != 0 || tempRatio != currentLeftAmpRatio;
                 currentLeftAmpRatio = tempRatio;
             }
             else if (sideType == JoyConSide.Right)
             {
-                tempRatio = currentHap.RumbleMotorStrengthRightLightFast / 255.0;
+                tempRatio = currentHap.rumbleState.RumbleMotorStrengthRightLightFast / 255.0;
                 dirty = tempRatio != 0 || tempRatio != currentRightAmpRatio;
                 currentRightAmpRatio = tempRatio;
             }
@@ -1195,6 +1215,76 @@ namespace DS4WinWPF.DS4Library.InputDevices
             // Revert back to low power state
             byte[] powerChoiceArray = new byte[] { 0x01 };
             Subcommand(SwitchProSubCmd.SET_LOW_POWER_STATE, powerChoiceArray, 1, checkResponse: true);
+        }
+
+        private void CalculateDeviceSlotMask()
+        {
+            // Map 1-15 as a set of 4 LED lights
+            switch (deviceSlotNumber)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    deviceSlotMask = (byte)(1 << deviceSlotNumber);
+                    break;
+                case 4:
+                    deviceSlotMask = 0x01 | 0x02;
+                    break;
+                case 5:
+                    deviceSlotMask = 0x01 | 0x04;
+                    break;
+                case 6:
+                    deviceSlotMask = 0x01 | 0x08;
+                    break;
+
+                case 7:
+                    deviceSlotMask = 0x02 | 0x04;
+                    break;
+                case 8:
+                    deviceSlotMask = 0x02 | 0x08;
+                    break;
+
+                case 9:
+                    deviceSlotMask = 0x04 | 0x08;
+                    break;
+
+                case 10:
+                    deviceSlotMask = 0x01 | 0x02 | 0x04;
+                    break;
+                case 11:
+                    deviceSlotMask = 0x01 | 0x02 | 0x08;
+                    break;
+                case 12:
+                    deviceSlotMask = 0x01 | 0x04 | 0x08;
+                    break;
+
+                case 13:
+                    deviceSlotMask = 0x02 | 0x04 | 0x08;
+                    break;
+
+                case 14:
+                    deviceSlotMask = 0x01 | 0x02 | 0x04 | 0x08;
+                    break;
+                default:
+                    deviceSlotMask = 0x00;
+                    break;
+            }
+        }
+
+        private void SetupOptionsEvents()
+        {
+            if (nativeOptionsStore != null)
+            {
+            }
+        }
+
+        public override void LoadStoreSettings()
+        {
+            if (nativeOptionsStore != null)
+            {
+                enableHomeLED = nativeOptionsStore.EnableHomeLED;
+            }
         }
     }
 }
