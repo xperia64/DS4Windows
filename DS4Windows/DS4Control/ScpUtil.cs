@@ -944,7 +944,7 @@ namespace DS4Windows
                                                             ref requiredSize, 0);
 
                     string tmpitnow = System.Text.Encoding.Unicode.GetString(descriptionBuffer);
-                    string tempStrip = tmpitnow.Remove(tmpitnow.IndexOf("\0\0"));
+                    string tempStrip = tmpitnow.TrimEnd('\0');
                     string[] tmparray = tempStrip.Split((char)0);
                     hardwareIds.AddRange(tmparray);
                 }
@@ -3306,6 +3306,7 @@ namespace DS4Windows
                 XmlNode xmlGyroSwipeTriggerCond = m_Xdoc.CreateNode(XmlNodeType.Element, "TriggerCond", null); xmlGyroSwipeTriggerCond.InnerText = SaTriggerCondString(gyroSwipeInfo[device].triggerCond); xmlGyroSwipeSettingsElement.AppendChild(xmlGyroSwipeTriggerCond);
                 XmlNode xmlGyroSwipeTriggerTurns = m_Xdoc.CreateNode(XmlNodeType.Element, "TriggerTurns", null); xmlGyroSwipeTriggerTurns.InnerText = gyroSwipeInfo[device].triggerTurns.ToString(); xmlGyroSwipeSettingsElement.AppendChild(xmlGyroSwipeTriggerTurns);
                 XmlNode xmlGyroSwipeXAxis = m_Xdoc.CreateNode(XmlNodeType.Element, "XAxis", null); xmlGyroSwipeXAxis.InnerText = gyroSwipeInfo[device].xAxis.ToString(); xmlGyroSwipeSettingsElement.AppendChild(xmlGyroSwipeXAxis);
+                XmlNode xmlGyroSwipeDelayTime = m_Xdoc.CreateNode(XmlNodeType.Element, "DelayTime", null); xmlGyroSwipeDelayTime.InnerText = gyroSwipeInfo[device].delayTime.ToString(); xmlGyroSwipeSettingsElement.AppendChild(xmlGyroSwipeDelayTime);
                 rootElement.AppendChild(xmlGyroSwipeSettingsElement);
 
                 XmlNode xmlLSC = m_Xdoc.CreateNode(XmlNodeType.Element, "LSCurve", null); xmlLSC.InnerText = lsCurve[device].ToString(); rootElement.AppendChild(xmlLSC);
@@ -4610,6 +4611,16 @@ namespace DS4Windows
                         }
                     }
                     catch { }
+
+                    try
+                    {
+                        Item = xmlGyroSwipeElement.SelectSingleNode("DelayTime");
+                        if (int.TryParse(Item?.InnerText ?? "", out int tempDelay))
+                        {
+                            gyroSwipeInfo[device].delayTime = tempDelay;
+                        }
+                    }
+                    catch { }
                 }
 
                 // Check for TouchpadOutputMode if UseTPforControls is not present in profile
@@ -5284,7 +5295,8 @@ namespace DS4Windows
                 ResetMouseProperties(device, control);
 
                 // Unplug existing output device if requested profile does not exist
-                OutputDevice tempOutDev = control.outputDevices[device];
+                OutputDevice tempOutDev = device < ControlService.CURRENT_DS4_CONTROLLER_LIMIT ?
+                    control.outputDevices[device] : null;
                 if (tempOutDev != null)
                 {
                     tempOutDev = null;

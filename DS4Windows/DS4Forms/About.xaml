@@ -83,17 +83,21 @@ Scan Code: Keys are interpreted differently. May be needed for certain games
                         <Label Content="Translators:" Margin="0,20,0,0" />
                     </StackPanel>
                     <TextBox TextWrapping="Wrap" xml:space="preserve" IsReadOnly="True"
-                             DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Auto" Margin="10,0,10,10">mayawei - Chinese
+                             DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Auto" Margin="10,0,10,10">xLive - Arabic
+mayawei - Chinese
 SyaoranChang - Chinese (Taiwan)
 Maikeru007 - Czech
 RedDevilus - Dutch
 RedDevilus - French
 Flo082002, Haamar - German
+avsha114 - Hebrew
 RaydenX93 - Italian
 jeek-midford, Ryochan7, stryblt - Japanese
+gregory678 - Polish
 Leomelati - Portuguese (Brazilian)
 peter9811 - Spanish
-dondrakon, DragonZX - Russian
+dondrakon, DragonZX, shikulja - Russian
+dondrakon - Ukranian
                     </TextBox>
                 </DockPanel>
             </TabItem>
