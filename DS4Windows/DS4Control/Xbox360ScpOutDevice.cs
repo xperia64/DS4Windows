@@ -21,7 +21,10 @@ namespace DS4Windows
 
         public delegate void Xbox360FeedbackReceivedEventHandler(Xbox360ScpOutDevice sender, byte large, byte small, int idx);
         public event Xbox360FeedbackReceivedEventHandler FeedbackReceived;
-        public Xbox360FeedbackReceivedEventHandler forceFeedbackCall;
+        //public Xbox360FeedbackReceivedEventHandler forceFeedbackCall;
+        // Input index, Xbox360FeedbackReceivedEventHandler instance
+        public Dictionary<int, Xbox360FeedbackReceivedEventHandler> forceFeedbacksDict =
+            new Dictionary<int, Xbox360FeedbackReceivedEventHandler>();
 
         public Xbox360ScpOutDevice(X360BusDevice client, int idx)
         {
@@ -51,6 +54,13 @@ namespace DS4Windows
 
         public override void Disconnect()
         {
+            foreach (KeyValuePair<int, Xbox360FeedbackReceivedEventHandler> pair in forceFeedbacksDict)
+            {
+                FeedbackReceived -= pair.Value;
+            }
+
+            forceFeedbacksDict.Clear();
+
             FeedbackReceived = null;
             x360Bus.Unplug(slotIdx);
         }
@@ -64,6 +74,25 @@ namespace DS4Windows
             if (submit)
             {
                 x360Bus.Report(report, rumble);
+            }
+        }
+
+        public override void RemoveFeedbacks()
+        {
+            foreach (KeyValuePair<int, Xbox360FeedbackReceivedEventHandler> pair in forceFeedbacksDict)
+            {
+                FeedbackReceived -= pair.Value;
+            }
+
+            forceFeedbacksDict.Clear();
+        }
+
+        public override void RemoveFeedback(int inIdx)
+        {
+            if (forceFeedbacksDict.TryGetValue(inIdx, out Xbox360FeedbackReceivedEventHandler handler))
+            {
+                FeedbackReceived -= handler;
+                forceFeedbacksDict.Remove(inIdx);
             }
         }
     }
