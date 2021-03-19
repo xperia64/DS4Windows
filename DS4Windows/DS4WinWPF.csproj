@@ -183,6 +183,9 @@
     <Compile Include="DS4Forms\AutoProfiles.xaml.cs">
       <DependentUpon>AutoProfiles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DS4Forms\AxialStickUserControl.xaml.cs">
+      <DependentUpon>AxialStickUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DS4Forms\BindingWindow.xaml.cs">
       <DependentUpon>BindingWindow.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,7 @@
     </Compile>
     <Compile Include="DS4Forms\Converters\EscapeAccessKeysConverter.cs" />
     <Compile Include="DS4Forms\ViewModels\AutoProfilesViewModel.cs" />
+    <Compile Include="DS4Forms\ViewModels\AxialStickControlViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\BindingWindowViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\ChangelogViewModel.cs" />
     <Compile Include="DS4Forms\ViewModels\ControllerListViewModel.cs" />
@@ -306,6 +310,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DS4Forms\AutoProfiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DS4Forms\AxialStickUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -539,7 +547,8 @@
     <Content Include="BezierCurveEditor\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\social\frog_site_logo.png" />
+    <Resource Include="Resources\social\GitHub-Mark-Light-64px.png" />
+    <Resource Include="Resources\social\GitHub-Mark-64px.png" />
     <Resource Include="Resources\DS4 Config_white.png" />
     <Resource Include="Resources\newprofile_white.png" />
     <Resource Include="Resources\copy_white.png" />
@@ -563,7 +572,6 @@
     <Resource Include="Resources\social\twitter_logo_initial.png" />
     <Resource Include="Resources\social\minds.png" />
     <Resource Include="Resources\social\mastodon.png" />
-    <Resource Include="Resources\social\discord.png" />
     <Resource Include="Resources\social\bittube.png" />
     <Resource Include="Resources\rainbowCCrop.png" />
     <Resource Include="Resources\rainbowC.png" />

@@ -194,8 +194,7 @@ namespace DS4Windows
         {
             sPrev = new SixAxis(0, 0, 0, 0, 0, 0, 0.0);
             now = new SixAxis(0, 0, 0, 0, 0, 0, 0.0);
-            for (int i = 0; i < gyro_average_window.Length; i++) gyro_average_window[i] = new GyroAverageWindow();
-            gyroAverageTimer.Start();
+            StartContinuousCalibration();
         }
 
         int temInt = 0;
@@ -318,16 +317,7 @@ namespace DS4Windows
 
                 if (gyroAverageTimer.IsRunning)
                 {
-                    double accelMag = Math.Sqrt(AccelX * AccelX + AccelY * AccelY + AccelZ * AccelZ);
-                    PushSensorSamples(currentYaw, currentPitch, currentRoll, (float)accelMag);
-                    if (gyroAverageTimer.ElapsedMilliseconds > 5000L)
-                    {
-                        gyroAverageTimer.Stop();
-                        AverageGyro(ref gyro_offset_x, ref gyro_offset_y, ref gyro_offset_z, ref gyro_accel_magnitude);
-#if DEBUG
-                    Console.WriteLine("AverageGyro {0} {1} {2} {3}", gyro_offset_x, gyro_offset_y, gyro_offset_z, gyro_accel_magnitude);
-#endif
-                    }
+                    CalcSensorCamples(ref currentYaw, ref currentPitch, ref currentRoll, ref AccelX, ref AccelY, ref AccelZ);
                 }
 
                 currentYaw -= gyro_offset_x;
@@ -351,6 +341,40 @@ namespace DS4Windows
             }
         }
 
+        // Entry point to run continuous calibration for non-DS4 input devices
+        public unsafe void PrepareNonDS4SixAxis(ref int currentYaw, ref int currentPitch, ref int currentRoll,
+            ref int AccelX, ref int AccelY, ref int AccelZ)
+        {
+            unchecked
+            {
+                if (gyroAverageTimer.IsRunning)
+                {
+                    CalcSensorCamples(ref currentYaw, ref currentPitch, ref currentRoll, ref AccelX, ref AccelY, ref AccelZ);
+                }
+
+                currentYaw -= gyro_offset_x;
+                currentPitch -= gyro_offset_y;
+                currentRoll -= gyro_offset_z;
+            }
+        }
+
+        private unsafe void CalcSensorCamples(ref int currentYaw, ref int currentPitch, ref int currentRoll, ref int AccelX, ref int AccelY, ref int AccelZ)
+        {
+            unchecked
+            {
+                double accelMag = Math.Sqrt(AccelX * AccelX + AccelY * AccelY + AccelZ * AccelZ);
+                PushSensorSamples(currentYaw, currentPitch, currentRoll, (float)accelMag);
+                if (gyroAverageTimer.ElapsedMilliseconds > 5000L)
+                {
+                    gyroAverageTimer.Stop();
+                    AverageGyro(ref gyro_offset_x, ref gyro_offset_y, ref gyro_offset_z, ref gyro_accel_magnitude);
+#if DEBUG
+                    Console.WriteLine("AverageGyro {0} {1} {2} {3}", gyro_offset_x, gyro_offset_y, gyro_offset_z, gyro_accel_magnitude);
+#endif
+                }
+            }
+        }
+
         public bool fixupInvertedGyroAxis()
         {
             bool result = false;
@@ -370,12 +394,24 @@ namespace DS4Windows
             SixAccelMoved?.Invoke(this, args);
         }
 
+        public void StartContinuousCalibration()
+        {
+            for (int i = 0; i < gyro_average_window.Length; i++) gyro_average_window[i] = new GyroAverageWindow();
+            gyroAverageTimer.Start();
+        }
+
+        public void StopContinuousCalibration()
+        {
+            gyroAverageTimer.Stop();
+            gyroAverageTimer.Reset();
+            for (int i = 0; i < gyro_average_window.Length; i++) gyro_average_window[i].Reset();
+        }
+
         public void ResetContinuousCalibration()
         {
-            for (int i = 0; i < num_gyro_average_windows; i++)
-                gyro_average_window[i].Reset();
-
-            gyroAverageTimer.Restart();
+            // Potential race condition with CalcSensorCamples() since this method is called after checking gyroAverageTimer.IsRunning == true
+            StopContinuousCalibration();
+            StartContinuousCalibration();
         }
 
         public unsafe void PushSensorSamples(int x, int y, int z, double accelMagnitude)
