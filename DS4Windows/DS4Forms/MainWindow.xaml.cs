@@ -166,7 +166,7 @@ namespace DS4WinWPF.DS4Forms
                     {
                         MessageBox.Show(Strings.FutureNetNotInstalled, Strings.UpgradeNetCaption,
                             MessageBoxButton.OK, MessageBoxImage.Warning);
-                        Util.StartProcessHelper("https://dotnet.microsoft.com/download");
+                        Util.StartProcessHelper("https://dotnet.microsoft.com/download/dotnet/5.0/runtime");
                     }));
                 }
             });
