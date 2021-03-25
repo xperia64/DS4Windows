@@ -14,7 +14,7 @@
           "code": "en",
           "header": "Version 2.2.15",
           "log_text": ["* Ignore duplicate device when in Shared mode",
-            "* Added extra processing to Version string for .NET 5 and later. Expected Microsoft to use their own stanadard was a mistake",
+            "* Added extra processing to Version string for .NET 5 and later. Expecting Microsoft to use their own stanadard was a mistake",
             "* Changed URL used for .NET 5 Runtime download"],
           "editor": "ryochan7",
           "editors_note": ["None"],
