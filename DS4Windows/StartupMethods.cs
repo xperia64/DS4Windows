@@ -149,7 +149,18 @@ namespace DS4WinWPF
                     string tempVersion = baseKey.GetValue("Version")?.ToString() ?? string.Empty;
                     if (!string.IsNullOrEmpty(tempVersion))
                     {
-                        result = new Version(tempVersion);
+                        // Check for version string with extra info not applicable to
+                        // a version number and strip it out (6.0.0-preview.2.21154.6)
+                        int dashIndex = tempVersion.IndexOf("-");
+                        if (dashIndex > -1)
+                            tempVersion = tempVersion.Substring(0, dashIndex);
+
+                        try
+                        {
+                            result = new Version(tempVersion);
+                        }
+                        // Return Version("0.0.0") if conversion fails
+                        catch (ArgumentException) {}
                     }
                 }
             }
