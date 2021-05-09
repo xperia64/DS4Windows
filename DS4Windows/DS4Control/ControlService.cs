@@ -1241,7 +1241,7 @@ namespace DS4Windows
         public bool Start(bool showlog = true)
         {
             inServiceTask = true;
-            startViGEm();
+            StartViGEm();
             //if (vigemTestClient != null)
             if (x360Bus.Open() && x360Bus.Start())
             {

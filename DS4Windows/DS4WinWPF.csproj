@@ -55,6 +55,9 @@
   <ItemGroup>
     <None Remove="libs\x64\**" />
     <None Remove="libs\x86\**" />
+    <Compile Remove="DS4Control\DS4OutDevices\**" />
+    <Compile Remove="DS4Control\DS4OutDevice.cs" />
+    <Compile Remove="DS4Control\Xbox360OutDevice.cs" />
   </ItemGroup>
 
   <ItemGroup>
