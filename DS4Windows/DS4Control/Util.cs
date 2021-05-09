@@ -150,7 +150,15 @@ namespace DS4Windows
         {
             if (!Global.IsAdministrator())
             {
-                Process.Start(path);
+                ProcessStartInfo startInfo = new ProcessStartInfo(path);
+                startInfo.UseShellExecute = true;
+                try
+                {
+                    using (Process temp = Process.Start(startInfo))
+                    {
+                    }
+                }
+                catch { }
             }
             else
             {
@@ -171,6 +179,7 @@ namespace DS4Windows
             // interpreted as a delimiter
             startInfo.Arguments = $"\"{path}\"";
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.UseShellExecute = true;
             try
             {
                 using (Process temp = Process.Start(startInfo)) { }
@@ -205,7 +214,7 @@ namespace DS4Windows
                 {
                     w.WriteLine($"@del /S \"{Global.exedirpath}\\Update Files\\DS4Windows\"");
                 }
-                w.WriteLine("@DEL \"%~f0\""); // Attempt to delete myself without opening a time paradox.
+                w.WriteLine("@start /b \"\" cmd /c DEL \"%~f0\"&exit /b"); // Attempt to delete myself without opening a time paradox.
                 w.Close();
             }
 

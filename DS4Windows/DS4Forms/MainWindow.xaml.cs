@@ -157,18 +157,6 @@ namespace DS4WinWPF.DS4Forms
                 }
 
                 //UpdateTheUpdater();
-
-                Version netInstallVersion = StartupMethods.NetVersionInstalled();
-                Version minFutureNetVersion = new Version("5.0.0");
-                if (netInstallVersion.CompareTo(minFutureNetVersion) < 0)
-                {
-                    Dispatcher.BeginInvoke((Action)(() =>
-                    {
-                        MessageBox.Show(Strings.FutureNetNotInstalled, Strings.UpgradeNetCaption,
-                            MessageBoxButton.OK, MessageBoxImage.Warning);
-                        Util.StartProcessHelper("https://dotnet.microsoft.com/download");
-                    }));
-                }
             });
 
             // Log exceptions that might occur
@@ -308,9 +296,9 @@ namespace DS4WinWPF.DS4Forms
                         Dispatcher.Invoke(() =>
                         {
                             MessageBox.Show(Properties.Resources.PleaseDownloadUpdater);
-                            Util.StartProcessHelper("https://github.com/Ryochan7/DS4Updater/releases/tag/v{UPDATER_VERSION}");
+                            Util.StartProcessHelper($"https://github.com/Ryochan7/DS4Updater/releases/tag/v{version}/{mainWinVM.updaterExe}");
                         });
-                        //Process.Start($"https://github.com/Ryochan7/DS4Updater/releases/download/v{UPDATER_VERSION}/{updaterExe}");
+                        //Process.Start($"https://github.com/Ryochan7/DS4Updater/releases/download/v{version}/{mainWinVM.updaterExe}");
                     }
                 }
                 else
@@ -572,7 +560,7 @@ Suspend support not enabled.", true);
                             StartStopBtn.IsEnabled = false;
                         }));
 
-                        App.rootHub.Stop();
+                        App.rootHub.Stop(immediateUnplug: true);
                         wasrunning = true;
                     }
 
@@ -860,7 +848,7 @@ Suspend support not enabled.", true);
             Task serviceTask = Task.Run(() =>
             {
                 if (service.running)
-                    service.Stop();
+                    service.Stop(immediateUnplug: true);
                 else
                     service.Start();
             });
@@ -1154,6 +1142,21 @@ Suspend support not enabled.", true);
                                         }
                                     }
                                 }
+                                else if ((strData[0] == "changeledcolor") && strData.Length >= 5)
+                                {
+                                        // Command syntax: changeledcolor.device#.red.gree.blue (ex changeledcolor.1.255.0.0)
+                                   if (int.TryParse(strData[1], out tdevice))
+                                        tdevice--;
+                                    if (tdevice >= 0 && tdevice < ControlService.MAX_DS4_CONTROLLER_COUNT)
+                                    {
+                                        byte.TryParse(strData[2], out byte red);
+                                        byte.TryParse(strData[3], out byte green);
+                                        byte.TryParse(strData[4], out byte blue);
+
+                                        conLvViewModel.ControllerCol[tdevice].UpdateCustomLightColor(Color.FromRgb(red, green, blue));
+                                    }
+
+                                }
                                 else if ((strData[0] == "loadprofile" || strData[0] == "loadtempprofile") && strData.Length >= 3)
                                 {
                                     // Command syntax: LoadProfile.device#.profileName (fex LoadProfile.1.GameSnake or LoadTempProfile.1.WebBrowserSet)
@@ -1297,7 +1300,7 @@ Suspend support not enabled.", true);
                 loopHotplug = hotplugCounter > 0;
             }
 
-            Program.rootHub.UpdateHidGuardAttributes();
+            Program.rootHub.UpdateHidHiddenAttributes();
             while (loopHotplug == true)
             {
                 Thread.Sleep(HOTPLUG_CHECK_DELAY);
@@ -1390,7 +1393,15 @@ Suspend support not enabled.", true);
 
         private void ProfFolderBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Global.appdatapath + "\\Profiles");
+            ProcessStartInfo startInfo = new ProcessStartInfo(Global.appdatapath + "\\Profiles");
+            startInfo.UseShellExecute = true;
+            try
+            {
+                using (Process temp = Process.Start(startInfo))
+                {
+                }
+            }
+            catch { }
         }
 
         private void ControlPanelBtn_Click(object sender, RoutedEventArgs e)
@@ -1408,11 +1419,21 @@ Suspend support not enabled.", true);
             });
 
             StartStopBtn.IsEnabled = true;
-            Process p = new Process();
-            p.StartInfo.FileName = Global.exelocation;
-            p.StartInfo.Arguments = "-driverinstall";
-            p.StartInfo.Verb = "runas";
-            try { p.Start(); }
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = Global.exelocation;
+            startInfo.Arguments = "-driverinstall";
+            startInfo.Verb = "runas";
+            startInfo.UseShellExecute = true;
+            try
+            {
+                using (Process temp = Process.Start(startInfo))
+                {
+                    temp.WaitForExit();
+                    Global.RefreshHidHideInfo();
+
+                    settingsWrapVM.DriverCheckRefresh();
+                }
+            }
             catch { }
         }
 
@@ -1429,13 +1450,20 @@ Suspend support not enabled.", true);
         {
             //bool deriverinstalled = Global.IsViGEmBusInstalled();
             bool deriverinstalled = Global.IsScpVBusInstalled();
+			//if (!deriverinstalled || !Global.IsRunningSupportedViGEmBus())
             if (!deriverinstalled)
             {
-                Process p = new Process();
-                p.StartInfo.FileName = $"{Global.exelocation}";
-                p.StartInfo.Arguments = "-driverinstall";
-                p.StartInfo.Verb = "runas";
-                try { p.Start(); }
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = $"{Global.exelocation}";
+                startInfo.Arguments = "-driverinstall";
+                startInfo.Verb = "runas";
+                startInfo.UseShellExecute = true;
+                try
+                {
+                    using (Process temp = Process.Start(startInfo))
+                    {
+                    }
+                }
                 catch { }
             }
         }
@@ -1448,7 +1476,7 @@ Suspend support not enabled.", true);
             dialog.Filter = "DS4Windows Profile (*.xml)|*.xml";
             dialog.Title = "Select Profile to Import File";
             if (Global.appdatapath != Global.exedirpath)
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\DS4Windows" + @"\Profiles\";
+                dialog.InitialDirectory = Global.localAppDataPpath;
             else
                 dialog.InitialDirectory = Global.exedirpath + @"\Profiles\";
 
@@ -1689,6 +1717,24 @@ Suspend support not enabled.", true);
             Util.StartProcessHelper("https://gamepad-tester.com/");
         }
 
+        private void HidHideBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string driveLetter = System.IO.Path.GetPathRoot(Global.exedirpath);
+            string path = System.IO.Path.Combine(driveLetter, "Program Files",
+                "Nefarius Software Solutions e.U", "HidHideClient", "HidHideClient.exe");
+
+            if (File.Exists(path))
+            {
+                try
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo(path);
+                    startInfo.UseShellExecute = true;
+                    using (Process proc = Process.Start(startInfo)) { }
+                }
+                catch { }
+            }
+        }
+
         private void HidNinjaBtn_Click(object sender, RoutedEventArgs e)
         {
             string path = System.IO.Path.Combine(Global.exedirpath, "Tools",
@@ -1698,7 +1744,9 @@ Suspend support not enabled.", true);
             {
                 try
                 {
-                    using (Process proc = Process.Start(path)) { }
+                    ProcessStartInfo startInfo = new ProcessStartInfo(path);
+                    startInfo.UseShellExecute = true;
+                    using (Process proc = Process.Start(startInfo)) { }
                 }
                 catch { }
             }
