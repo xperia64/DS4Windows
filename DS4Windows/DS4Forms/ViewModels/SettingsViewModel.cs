@@ -300,6 +300,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool HidHideInstalled { get => DS4Windows.Global.hidHideInstalled; }
         public event EventHandler HidHideInstalledChanged;
 
+        public bool HidGuardianInstalled { get => DS4Windows.Global.hidguardInstalled; }
+        public event EventHandler HidGuardianInstalledChanged;
+
         public SettingsViewModel()
         {
             checkEveryUnitIdx = 1;
@@ -533,6 +536,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public void DriverCheckRefresh()
         {
             HidHideInstalledChanged?.Invoke(this, EventArgs.Empty);
+            HidGuardianInstalledChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
